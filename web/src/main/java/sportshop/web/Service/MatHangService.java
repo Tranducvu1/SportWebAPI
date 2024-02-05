@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import sportshop.web.Model.MatHang;
+import sportshop.web.Model.DanhMuc;
 import sportshop.web.Model.Log;
 import sportshop.web.Repository.MatHangRepository;
 import sportshop.web.Repository.LogRepository;
@@ -32,7 +33,7 @@ public class MatHangService {
 		 MatHang MatHangs = mathangRepository.save(MatHang);
 		 if (MatHangs != null) {
 				Log log = new Log();
-				log.setLogString("Thêm mới lĩnh vực id = " + MatHangs.getId());
+				log.setLogString("Thêm mới mặt hàng id = " + MatHangs.getId());
 				log.setCreateTime(new Timestamp(System.currentTimeMillis()));
 				logRepository.save(log);
 				return true;
@@ -44,7 +45,7 @@ public class MatHangService {
 			MatHang MatHangs = mathangRepository.save(MatHang);
 			if (MatHangs != null) {
 				Log log = new Log();
-				log.setLogString("Cập nhật sinh viên id = " + MatHangs.getId());
+				log.setLogString("Cập nhật mặt hàng id = " + MatHangs.getId());
 				log.setCreateTime(new Timestamp(System.currentTimeMillis()));
 				logRepository.save(log);
 				return true;

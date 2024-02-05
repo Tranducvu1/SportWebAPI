@@ -32,7 +32,7 @@ public class NhanVienService {
 		 NhanVien NhanViens = nhannienRepository.save(NhanVien);
 		 if (NhanViens != null) {
 				Log log = new Log();
-				log.setLogString("Thêm mới lĩnh vực id = " + NhanViens.getId());
+				log.setLogString("Thêm mới nhân viên id = " + NhanViens.getId());
 				log.setCreateTime(new Timestamp(System.currentTimeMillis()));
 				logRepository.save(log);
 				return true;
@@ -44,7 +44,7 @@ public class NhanVienService {
 			NhanVien nhanvien = nhannienRepository.save(NhanVien);
 			if (nhanvien != null) {
 				Log log = new Log();
-				log.setLogString("Cập nhật sinh viên id = " + nhanvien.getId());
+				log.setLogString("Cập nhật nhân viên id = " + nhanvien.getId());
 				log.setCreateTime(new Timestamp(System.currentTimeMillis()));
 				logRepository.save(log);
 				return true;

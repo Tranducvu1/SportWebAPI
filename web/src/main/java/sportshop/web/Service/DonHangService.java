@@ -40,7 +40,7 @@ public class DonHangService {
 		 DonHang DonHangs = DonHangRepository.save(donhang);
 		 if (DonHangs != null) {
 				Log log = new Log();
-				log.setLogString("Thêm mới lĩnh vực id = " + DonHangs.getId());
+				log.setLogString("Thêm mới đơn hàng id = " + DonHangs.getId());
 				log.setCreateTime(new Timestamp(System.currentTimeMillis()));
 				logRepository.save(log);
 				return true;
@@ -52,7 +52,7 @@ public class DonHangService {
 			DonHang donhang = DonHangRepository.save(DonHang);
 			if (donhang != null) {
 				Log log = new Log();
-				log.setLogString("Cập nhật sinh viên id = " + donhang.getId());
+				log.setLogString("Cập nhật đơn hàng id = " + donhang.getId());
 				log.setCreateTime(new Timestamp(System.currentTimeMillis()));
 				logRepository.save(log);
 				return true;

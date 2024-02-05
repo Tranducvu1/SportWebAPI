@@ -4,11 +4,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
-import sportshop.web.Model.Banner;
+import sportshop.web.Model.DanhMuc;
 
 @Repository
-public interface BannerRepository extends JpaRepository<Banner,Integer>, JpaSpecificationExecutor<Banner> {
-	
-
+public interface DanhMucRepository extends JpaRepository<DanhMuc,Integer>, JpaSpecificationExecutor<DanhMuc> {
 	
 }

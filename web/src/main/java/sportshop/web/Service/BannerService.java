@@ -31,7 +31,7 @@ public class BannerService {
 		 Banner banners = bannerRepository.save(banner);
 		 if (banners != null) {
 				Log log = new Log();
-				log.setLogString("Thêm mới lĩnh vực id = " + banners.getId());
+				log.setLogString("Thêm mới banner id = " + banners.getId());
 				log.setCreateTime(new Timestamp(System.currentTimeMillis()));
 				logRepository.save(log);
 				return true;
@@ -43,7 +43,7 @@ public class BannerService {
 			Banner banners = bannerRepository.save(banner);
 			if (banners != null) {
 				Log log = new Log();
-				log.setLogString("Cập nhật sinh viên id = " + banners.getId());
+				log.setLogString("Cập nhật banner id = " + banners.getId());
 				log.setCreateTime(new Timestamp(System.currentTimeMillis()));
 				logRepository.save(log);
 				return true;

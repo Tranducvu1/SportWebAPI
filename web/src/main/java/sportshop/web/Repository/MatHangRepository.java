@@ -14,7 +14,8 @@ import sportshop.web.Model.MatHang;
 
 @Repository
 public interface MatHangRepository extends JpaRepository<MatHang,Integer>, JpaSpecificationExecutor<MatHang> {
-	@Query("Select mh FROM MatHang mh WHERE mh.tenmathang = :keyword" )
+	//search keyword không phân biệt chữ hoa hay thương
+    @Query("SELECT mh FROM MatHang mh WHERE LOWER(mh.tenmathang) LIKE %:keyword%")
 	List<MatHang> searchByKeyword(@Param("keyword") String keyword);
 
 	

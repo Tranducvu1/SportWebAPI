@@ -32,7 +32,7 @@ public class NhaCungCapService {
 		 NhaCungCap NhaCungCaps = nhacungcapRepository.save(NhaCungCap);
 		 if (NhaCungCaps != null) {
 				Log log = new Log();
-				log.setLogString("Thêm mới lĩnh vực id = " + NhaCungCaps.getId());
+				log.setLogString("Thêm mới nhà cung cấp id = " + NhaCungCaps.getId());
 				log.setCreateTime(new Timestamp(System.currentTimeMillis()));
 				logRepository.save(log);
 				return true;
@@ -44,7 +44,7 @@ public class NhaCungCapService {
 			NhaCungCap nhacuhngcap = nhacungcapRepository.save(NhaCungCap);
 			if (NhaCungCap != null) {
 				Log log = new Log();
-				log.setLogString("Cập nhật sinh viên id = " + NhaCungCap.getId());
+				log.setLogString("Cập nhật nhà cung cấp id = " + NhaCungCap.getId());
 				log.setCreateTime(new Timestamp(System.currentTimeMillis()));
 				logRepository.save(log);
 				return true;

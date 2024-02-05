@@ -32,7 +32,7 @@ public class KhachHangService {
 		 KhachHang KhachHangs = khachhangRepository.save(KhachHang);
 		 if (KhachHangs != null) {
 				Log log = new Log();
-				log.setLogString("Thêm mới lĩnh vực id = " + KhachHangs.getId());
+				log.setLogString("Thêm mới khách hàng id = " + KhachHangs.getId());
 				log.setCreateTime(new Timestamp(System.currentTimeMillis()));
 				logRepository.save(log);
 				return true;
@@ -44,7 +44,7 @@ public class KhachHangService {
 			KhachHang khachHang = khachhangRepository.save(khachhang);
 			if (khachHang != null) {
 				Log log = new Log();
-				log.setLogString("Cập nhật sinh viên id = " + khachHang.getId());
+				log.setLogString("Cập nhật khách hàng id = " + khachHang.getId());
 				log.setCreateTime(new Timestamp(System.currentTimeMillis()));
 				logRepository.save(log);
 				return true;
