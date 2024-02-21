@@ -6,7 +6,9 @@ import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sportshop.web.Model.DanhMuc;
+import sportshop.web.Model.DonHang;
 import sportshop.web.Model.Log;
+import sportshop.web.Model.MatHang;
 import sportshop.web.Repository.DanhMucRepository;
 import sportshop.web.Repository.LogRepository;
 
@@ -21,8 +23,9 @@ public class DanhMucService{
 		
 		return danhmucRepository.findAll();
 	}
-	
-	
+	 public List<DanhMuc> searchByKeyword(String Keyword) {
+		 return danhmucRepository.searchByKeyword(Keyword);
+	 }
 	public Boolean save(DanhMuc danhmuc) {
 		DanhMuc danhmucs = danhmucRepository.save(danhmuc);
 		 if (danhmucs != null) {
@@ -34,7 +37,6 @@ public class DanhMucService{
 		}
 		return false; 
 	}
-	 
 	public Boolean update(DanhMuc danhmuc) {
 		DanhMuc danhmucs = danhmucRepository.save(danhmuc);
 		 if (danhmucs != null) {
@@ -46,11 +48,6 @@ public class DanhMucService{
 		}
 		return false; 
 	}
-	
-	
-	
-
-		
 		public DanhMuc getById(Integer id) {
 			DanhMuc original = requireOne(id);
 			return original;
@@ -58,5 +55,15 @@ public class DanhMucService{
 		
 		private DanhMuc requireOne(Integer id) {
 			return danhmucRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Resource not found: " + id));
+		}
+		
+		public MatHang getProductByIdFromCategory(DanhMuc danhMuc, Integer productId) {
+		    List<MatHang> products = danhMuc.getMathangs();
+		    for (MatHang product : products) {
+		        if (product.getId() == productId) {
+		            return product;
+		        }
+		    }
+		    return null; // Trả về null nếu không tìm thấy sản phẩm
 		}
 }

@@ -47,6 +47,9 @@ public class HoaDon {
 	@Column(name = "soluong", nullable = false)
 	private Long soluong;
 	
+	@Column(name = "giamgia", nullable = false)
+	private int giamgia;
+	
 	@Column(name = "maphuongthucvanchuyen", nullable = false)
 	private String maphuongthucvanchuyen;
 	

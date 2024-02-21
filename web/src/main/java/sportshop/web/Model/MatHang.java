@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
@@ -58,7 +59,7 @@ public class MatHang {
 	private int  danhgia;
 	
 	@Column(name = "soluong", nullable = false)
-	private String  soluong;
+	private int  soluong;
 	
 	@Column(name = "mota", nullable = false)
 	private String  mota;
@@ -73,14 +74,12 @@ public class MatHang {
 	private Timestamp ngaythem;
 	
 	@ManyToOne
-	@JsonBackReference
+	@JsonIgnore
     @JoinColumn(name = "danhmuc_id",nullable = false)
     private DanhMuc danhMuc;
 	
-	 public void setDanhmucId(int danhmucId) {
-	        if (danhMuc == null) {
-	            danhMuc = new DanhMuc();
-	        }
-	        danhMuc.setId(danhmucId);
-	    }
+	@Override
+	public String toString() {
+	    return "MatHang{id=" + id + ", tenMatHang=" + tenmathang + "}";
+	}
 }

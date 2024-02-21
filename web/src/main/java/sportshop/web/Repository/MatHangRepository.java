@@ -18,5 +18,6 @@ public interface MatHangRepository extends JpaRepository<MatHang,Integer>, JpaSp
     @Query("SELECT mh FROM MatHang mh WHERE LOWER(mh.tenmathang) LIKE %:keyword%")
 	List<MatHang> searchByKeyword(@Param("keyword") String keyword);
 
-	
+    @Query("SELECT m FROM MatHang m LEFT JOIN FETCH m.danhMuc WHERE m.id = :id")
+    MatHang findByIdWithDanhMuc(@Param("id") Integer id);
 }

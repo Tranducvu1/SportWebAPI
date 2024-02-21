@@ -23,12 +23,24 @@ public class MatHangService {
 	public List<MatHang> findAll(){
 		return mathangRepository.findAll();
 	}
+	
+	 public MatHang getProduct(Integer productId){
+	        return mathangRepository.findById(productId).get(); 
+	    }
+	 
+	
+	 
 	//search by name
 	 public List<MatHang> searchByKeyword(String Keyword) {
 		 return mathangRepository.searchByKeyword(Keyword);
 	 }
 	 
 		
+	 public MatHang getId(int id) {
+		 
+		return mathangRepository.findByIdWithDanhMuc(id);
+		 
+	 }
 	 public Boolean save(MatHang MatHang) {
 		 MatHang MatHangs = mathangRepository.save(MatHang);
 		 if (MatHangs != null) {
@@ -61,4 +73,8 @@ public class MatHangService {
 		private MatHang requireOne(Integer id) {
 			return mathangRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Resource not found: " + id));
 		}
+
+	
+
+		
 }

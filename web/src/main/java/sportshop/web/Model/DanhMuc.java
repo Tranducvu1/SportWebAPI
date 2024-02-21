@@ -3,12 +3,14 @@ package sportshop.web.Model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -21,8 +23,6 @@ import lombok.Setter;
 
 @Entity
 @Data
-@Getter
-@Setter
 @NoArgsConstructor
 @Table(name = "danhmuc")
 @JsonIgnoreProperties(value={"hibernateLazyInitializer","handler","fieldHandler"})
@@ -37,10 +37,15 @@ public class DanhMuc {
 
 	@Column(name = "tendanhmuc")
 	private String tendanhmuc;
+
+	@OneToMany(mappedBy = "danhMuc",fetch = FetchType.LAZY)
+	@JsonIgnore
+	private List<MatHang> mathangs ;
 	
-		
-	@OneToMany(mappedBy = "danhMuc", cascade = CascadeType.ALL)
-	@JsonManagedReference
-	private List<MatHang> mathangs = new ArrayList<>();
+	
+	@Override
+	public String toString() {
+	    return "DanhMuc{id=" + id + ", tenDanhMuc=" + tendanhmuc + "}";
+	}
 
 }

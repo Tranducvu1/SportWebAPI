@@ -1,6 +1,7 @@
 package sportshop.web.Model;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -9,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -30,27 +32,38 @@ public class DonHang {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	@Column(name = "madonhang", nullable = false)
+   
+
+	@Column(name = "madonhang")
 	private String madonhang;
 
 	@Column(name = "nhacungcap")
 	private String nhacungcap;
 	
-	@Column(name = "manhanvien")
-	private String manhanvien;
-		
-	@Column(name = "mamathang")
-	private String mamathang;
-	
+	@Column(name = "tenmathang")
+	private String tenmathang;
+
 	@Column(name = "phuongthucvanchuyen")
 	private String phuongthucvanchuyen;	
 	
-	@Column(name = "ngaydat", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false, nullable = false)
+	@Column(name = "ngaydat", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false)
 	private Timestamp ngaydat;
 	
-	@Column(name = "ngaychuyenden", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false, nullable = false)
+	@Column(name = "ngaychuyenden", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false)
 	private Timestamp ngaychuyenden;	
 	
 	@Column(name = "phivanchuyen")
-	private Long phivanchuyen;	
+	private Long phivanchuyen;
+	
+	@Column(name = "giamgia")
+	private int giamgia;
+	
+	@Column(name = "soluong")
+	private Integer  soluong;
+	
+	@Column(name = "hinhanh")
+	private String hinhanh;
+	
+	@Column(name = "money")
+	private Long Money;
 }
