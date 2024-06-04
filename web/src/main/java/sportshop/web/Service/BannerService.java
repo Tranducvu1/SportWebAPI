@@ -23,10 +23,7 @@ public class BannerService {
 	//getall
 	public List<Banner> findAll(){
 		return bannerRepository.findAll();
-	}
-	
-	 
-		
+	}	
 	 public Boolean save(Banner banner) {
 		 Banner banners = bannerRepository.save(banner);
 		 if (banners != null) {

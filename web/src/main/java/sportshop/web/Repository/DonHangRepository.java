@@ -14,7 +14,7 @@ import sportshop.web.Model.DonHang;
 
 @Repository
 public interface DonHangRepository extends JpaRepository<DonHang,Integer>, JpaSpecificationExecutor<DonHang> {
-	@Query("Select dh FROM DonHang dh WHERE dh.nhacungcap = :keyword OR dh.madonhang = :keyword")
+	@Query("Select dh FROM DonHang dh WHERE dh.tenmathang = :keyword")
 	List<DonHang> searchByKeyword(@Param("keyword") String keyword);
 	
 

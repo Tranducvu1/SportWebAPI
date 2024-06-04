@@ -61,6 +61,9 @@ public class MatHang {
 	@Column(name = "soluong", nullable = false)
 	private int  soluong;
 	
+	@Column(name = "size")
+	private String size;
+	
 	@Column(name = "mota", nullable = false)
 	private String  mota;
 	
@@ -69,6 +72,9 @@ public class MatHang {
 	
 	@Column(name = "gioi_tinh",nullable = false)
 	private String gender;
+	
+	@Column(name = "hangsanxuat")
+	private String hangsanxuat;
 	
 	@Column(name = "ngaythem", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false, nullable = false)
 	private Timestamp ngaythem;

@@ -32,19 +32,12 @@ public class DonHang {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-   
-
 	@Column(name = "madonhang")
 	private String madonhang;
 
-	@Column(name = "nhacungcap")
-	private String nhacungcap;
-	
 	@Column(name = "tenmathang")
 	private String tenmathang;
-
-	@Column(name = "phuongthucvanchuyen")
-	private String phuongthucvanchuyen;	
+	
 	
 	@Column(name = "ngaydat", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false)
 	private Timestamp ngaydat;
@@ -55,8 +48,6 @@ public class DonHang {
 	@Column(name = "phivanchuyen")
 	private Long phivanchuyen;
 	
-	@Column(name = "giamgia")
-	private int giamgia;
 	
 	@Column(name = "soluong")
 	private Integer  soluong;

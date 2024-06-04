@@ -46,6 +46,7 @@ public class DonHangService {
 	    	   new DonHang();
 	    	   donhang.setSoluong(1);
 	        } else {
+	        	
 	        	donhang.setSoluong(donhang.getSoluong()+1);
 	        }
 	        return DonHangRepository.save(donhang);
@@ -61,6 +62,7 @@ public class DonHangService {
 		 if (DonHangs != null) {
 				Log log = new Log();
 				log.setLogString("Thêm mới đơn hàng id = " + DonHangs.getId());
+				
 				log.setCreateTime(new Timestamp(System.currentTimeMillis()));
 				logRepository.save(log);
 				return true;

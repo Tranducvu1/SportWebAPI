@@ -74,7 +74,9 @@ public class MatHangService {
 			return mathangRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Resource not found: " + id));
 		}
 
-	
+		public List<MatHang> getMatHangByDanhMuc(DanhMuc danhMuc) {
+	        return mathangRepository.findByDanhMuc(danhMuc);
+	    }
 
 		
 }
