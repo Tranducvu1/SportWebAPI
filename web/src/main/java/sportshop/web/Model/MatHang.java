@@ -76,7 +76,6 @@ public class MatHang {
 	
 	@ManyToOne
 	@JsonIgnore
-	@JsonBackReference
 	@NotNull
     @JoinColumn(name = "danhmuc_id",nullable = false)
     private DanhMuc danhMuc;

@@ -32,14 +32,10 @@ public class HangSanXuat {
 
 	@OneToMany(mappedBy = "hangSanXuat")	
 	@JsonIgnore	
-	@JsonManagedReference
 	private List<MatHang> mathangs ;
 
 	@Override
 	public String toString() {
 		return "HangSanXuat [id=" + id + ", tenhang=" + tenhang + ", mathangs=" + mathangs + "]";
 	}
-
-	
-
 }

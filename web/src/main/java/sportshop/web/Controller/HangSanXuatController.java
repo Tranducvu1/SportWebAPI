@@ -20,20 +20,17 @@ import sportshop.web.Service.HangSanXuatService;
 @RestController
 @RequestMapping("/api/hangsanxuat")
 public class HangSanXuatController {
-
-	
 	@Autowired
 	private HangSanXuatService hangSanXuatService;
 	
 	@GetMapping()
 	public ResponseEntity<Object>  findAll(){
-		return ResponseEntity.ok(hangSanXuatService);
+		return ResponseEntity.ok(hangSanXuatService.findAll());
 	}
 	
 	@GetMapping("/search")
 	public ResponseEntity<Object> searchByKeyWord(@RequestParam(value = "keyword")String keyword){
 		return ResponseEntity.ok(hangSanXuatService.searchByKeyword(keyword));
-		
 	}
 	
 	@PostMapping(path = "/create", produces = "application/json;charset = utf-8")
