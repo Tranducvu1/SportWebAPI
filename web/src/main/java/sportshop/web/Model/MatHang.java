@@ -2,7 +2,7 @@ package sportshop.web.Model;
 
 import java.sql.Timestamp;
 import java.util.Set;
-
+import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -21,8 +21,6 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-
 @Entity
 @Data
 @Table(name = "mathang")
@@ -73,17 +71,19 @@ public class MatHang {
 	@Column(name = "gioi_tinh",nullable = false)
 	private String gender;
 	
-	@Column(name = "hangsanxuat")
-	private String hangsanxuat;
-	
 	@Column(name = "ngaythem", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false, nullable = false)
 	private Timestamp ngaythem;
 	
 	@ManyToOne
 	@JsonIgnore
+	@JsonBackReference
+	@NotNull
     @JoinColumn(name = "danhmuc_id",nullable = false)
     private DanhMuc danhMuc;
 	
+	@ManyToOne
+	@JoinColumn(name = "ma_hang_sx")
+	private HangSanXuat hangSanXuat;
 	@Override
 	public String toString() {
 	    return "MatHang{id=" + id + ", tenMatHang=" + tenmathang + "}";

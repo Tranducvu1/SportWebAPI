@@ -24,5 +24,7 @@ public interface MatHangRepository extends JpaRepository<MatHang,Integer>, JpaSp
     @Query("SELECT p FROM MatHang p WHERE p.dongia BETWEEN :fromPrice AND :toPrice")
     List<MatHang> findByPriceRange(double fromPrice, double toPrice);
     
+    List<MatHang> findByDanhMucId(Integer categoryId);
+    
     List<MatHang> findByDanhMuc(DanhMuc danhMuc);
 }

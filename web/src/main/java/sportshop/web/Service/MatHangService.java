@@ -3,6 +3,7 @@ package sportshop.web.Service;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,6 +64,10 @@ public class MatHangService {
 				return true;
 			}
 			return false; 
+		}
+		
+		public List<MatHang> findByCategoryId(Integer categoryId) {
+		    return mathangRepository.findByDanhMucId(categoryId);
 		}
 		
 		public MatHang getById(Integer id) {

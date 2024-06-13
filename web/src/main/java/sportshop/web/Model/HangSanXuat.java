@@ -6,10 +6,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -21,29 +19,27 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @NoArgsConstructor
-@Table(name = "danhmuc")
+@Table(name = "hangsanxuat")
 @JsonIgnoreProperties(value={"hibernateLazyInitializer","handler","fieldHandler"})
-public class DanhMuc {
+public class HangSanXuat {
 	@Id
 	@Column(name = "id", nullable = false)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	@Column(name = "madanhmuc", nullable = false)
-	private String madanhmuc;
+	@Column(name = "tenhang", nullable = false)
+	private String tenhang;
 
-	@Column(name = "tendanhmuc")
-	private String tendanhmuc;
-
-	@OneToMany(mappedBy = "danhMuc", cascade = CascadeType.ALL, orphanRemoval = true)	
+	@OneToMany(mappedBy = "hangSanXuat")	
 	@JsonIgnore	
 	@JsonManagedReference
 	private List<MatHang> mathangs ;
-	
-	
+
 	@Override
 	public String toString() {
-	    return "DanhMuc{id=" + id + ", tenDanhMuc=" + tendanhmuc + "}";
+		return "HangSanXuat [id=" + id + ", tenhang=" + tenhang + ", mathangs=" + mathangs + "]";
 	}
+
+	
 
 }

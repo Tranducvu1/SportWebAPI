@@ -5,8 +5,10 @@ import sportshop.web.Model.DanhMuc;
 import sportshop.web.Model.DonHang;
 import sportshop.web.Model.MatHang;
 import sportshop.web.Service.DanhMucService;
+import sportshop.web.Service.MatHangService;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -27,13 +29,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class DanhmucController {
  @Autowired
  private DanhMucService danhMucService;
- 
+ @Autowired
+ private MatHangService matHangService;
  @GetMapping("/danhmuc")
  public ResponseEntity<Object> findall(){
 	return ResponseEntity.ok(danhMucService.findAll());	 
  }
 
 
+ 
 @PostMapping(path="/danhmuc/create",produces = "application/json;charset=utf-8")
 public ResponseEntity<Boolean>  taomoi(@RequestBody DanhMuc danhmuc){
 	Boolean result = danhMucService.save(danhmuc);
