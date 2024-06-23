@@ -27,7 +27,7 @@ public class DanhMuc {
 	@Id
 	@Column(name = "id", nullable = false)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Integer id;
 	
 	@Column(name = "madanhmuc", nullable = false)
 	private String madanhmuc;
@@ -35,7 +35,7 @@ public class DanhMuc {
 	@Column(name = "tendanhmuc")
 	private String tendanhmuc;
 
-	@OneToMany(mappedBy = "danhMuc", cascade = CascadeType.ALL, orphanRemoval = true)	
+	@OneToMany(mappedBy = "danhMuc")	
 	@JsonIgnore	
 	@JsonManagedReference
 	private List<MatHang> mathangs ;

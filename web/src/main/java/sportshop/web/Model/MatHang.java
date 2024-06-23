@@ -1,8 +1,12 @@
 package sportshop.web.Model;
 
+import java.sql.Blob;
 import java.sql.Timestamp;
 import java.util.Set;
 import javax.validation.constraints.NotNull;
+
+import org.springframework.web.multipart.MultipartFile;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -25,7 +29,7 @@ import lombok.Setter;
 @Data
 @Table(name = "mathang")
 @Setter
-@Getter
+
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(value={"hibernateLazyInitializer","handler","fieldHandler"})
@@ -44,16 +48,16 @@ public class MatHang {
 	private String tenmathang;
 	
 	
-	@Column(name = "maphanloai", nullable = false)
+	@Column(name = "maphanloai")
 	private String maphanloai;
 	
 	@Column(name = "hinhanh", nullable = false)
 	private String hinhanh;
 	
 	@Column(name = "dongia", nullable = false)
-	private Long  dongia;
+	private int dongia;
 	
-	@Column(name = "danhgia", nullable = false)
+	@Column(name = "danhgia")
 	private int  danhgia;
 	
 	@Column(name = "soluong", nullable = false)
@@ -71,12 +75,10 @@ public class MatHang {
 	@Column(name = "gioi_tinh",nullable = false)
 	private String gender;
 	
-	@Column(name = "ngaythem", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false, nullable = false)
+	@Column(name = "ngaythem", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	private Timestamp ngaythem;
 	
 	@ManyToOne
-	@JsonIgnore
-	@NotNull
     @JoinColumn(name = "danhmuc_id",nullable = false)
     private DanhMuc danhMuc;
 	

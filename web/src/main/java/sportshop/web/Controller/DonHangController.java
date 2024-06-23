@@ -23,9 +23,7 @@ import sportshop.web.Service.MatHangService;
 public class DonHangController {
  @Autowired
  private DonHangService donhangservice;
-	@Autowired
-	private MatHangService matHangService;
- @GetMapping()
+	@GetMapping()
  public ResponseEntity<Object> findall(){
 	return ResponseEntity.ok(donhangservice.findAll());	 
  }

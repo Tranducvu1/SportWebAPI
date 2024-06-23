@@ -29,8 +29,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class DanhmucController {
  @Autowired
  private DanhMucService danhMucService;
- @Autowired
- private MatHangService matHangService;
  @GetMapping("/danhmuc")
  public ResponseEntity<Object> findall(){
 	return ResponseEntity.ok(danhMucService.findAll());	 

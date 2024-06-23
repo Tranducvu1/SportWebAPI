@@ -25,7 +25,7 @@ public class HangSanXuat {
 	@Id
 	@Column(name = "id", nullable = false)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Integer id;
 	
 	@Column(name = "tenhang", nullable = false)
 	private String tenhang;
