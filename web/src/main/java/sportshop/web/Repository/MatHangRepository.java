@@ -2,6 +2,8 @@ package sportshop.web.Repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -9,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import sportshop.web.Model.DanhMuc;
+import sportshop.web.Model.HangSanXuat;
 import sportshop.web.Model.MatHang;
 
 
@@ -26,5 +29,11 @@ public interface MatHangRepository extends JpaRepository<MatHang,Integer>, JpaSp
     
     List<MatHang> findByDanhMucId(Integer categoryId);
     
-    List<MatHang> findByDanhMuc(DanhMuc danhMuc);
+    Page<MatHang> findByDanhMuc(DanhMuc danhMuc, PageRequest pageRequest);
+    
+	Page<MatHang> findByHangSanXuat(HangSanXuat hangSanXuat, PageRequest of);
+
+	boolean existsById(Long id);
+
+	//List<MatHang> findByDanhMuc(DanhMuc danhMuc);
 }

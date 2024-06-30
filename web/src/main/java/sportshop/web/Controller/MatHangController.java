@@ -34,9 +34,10 @@ public class MatHangController {
 	public ResponseEntity<Object> findAll(){
 		return ResponseEntity.ok(matHangService.findAll());
 	}
-	@GetMapping("/mathang/search/{keyword}")
+	@GetMapping("/mathang/search")
 	public ResponseEntity<Object> SearchByKeyWord(@RequestParam(value = "keyword",required = false)String keyword ){
-	List<MatHang> result =	matHangService.searchByKeyword(keyword);
+		List<MatHang> result =	matHangService.searchByKeyword(keyword);
+		System.out.println(result);
 		return ResponseEntity.ok().body(result);
 	}
 		@GetMapping("/mathang/product/{id}")
@@ -63,6 +64,7 @@ public class MatHangController {
 		
 	@PutMapping(path = "/mathang/update/{id}",  consumes = "application/json",produces ="application/json;charset = utf-8")
 	public ResponseEntity<Boolean> update (@RequestBody @Valid MatHang mathang){
+		
 		Boolean rs = matHangService.update(mathang);
 		return ResponseEntity.ok(rs);
 	}
@@ -80,22 +82,38 @@ public class MatHangController {
      //   System.out.println(matHangs);
    //     return ResponseEntity.ok().body(matHangs);
   //  }
+//	@GetMapping("/mathang/pagination/{offset}/{pageSize}")
+//	private ResponseEntity<Page<MatHang>> getProductsWithSort(@PathVariable int offset, @PathVariable int pageSize,@RequestParam(required = false) Integer danhMucId){
+//		Page<MatHang> mathang = matHangService.getMatHangByDanhMuc(offset, pageSize);
+//		
+//		return ResponseEntity.ok(mathang);
+//		
+//	}
+//	 @GetMapping("/mathang/filter")
+//	    public ResponseEntity<List<MatHang>> filterAndSortProducts(
+//	            @RequestParam(required = false) Integer danhMucId,
+//	            @RequestParam(required = false) Integer hangSanXuatId,
+//	            @RequestParam(required = false) String priceRange,
+//	            @RequestParam(required = false, defaultValue = "asc") String sortOrder) {
+//	        
+//	        List<MatHang> result = matHangService.filterAndSortProducts(danhMucId, hangSanXuatId, priceRange, sortOrder);
+//	        return ResponseEntity.ok(result);
+//	    }
+    
 	@GetMapping("/mathang/pagination/{offset}/{pageSize}")
-	private ResponseEntity<Page<MatHang>> getProductsWithSort(@PathVariable int offset, @PathVariable int pageSize){
-		Page<MatHang> mathang = matHangService.getMatHangByDanhMuc(offset, pageSize);
-		return ResponseEntity.ok(mathang);
-		
+	public ResponseEntity<Page<MatHang>> getProductsWithFilterAndPagination(
+	    @PathVariable int offset,
+	    @PathVariable int pageSize,
+	    @RequestParam(required = false) Integer danhMucId,
+	    @RequestParam(required = false) Integer hangSanXuatId,
+	    @RequestParam(required = false) String priceRange,
+	    @RequestParam(required = false, defaultValue = "asc") String sortOrder) {
+
+	    Page<MatHang> result = matHangService.filterAndSortProducts(
+	        danhMucId, hangSanXuatId, priceRange, sortOrder ,offset, pageSize);
+	    return ResponseEntity.ok(result);
 	}
 	
-	 @GetMapping("/mathang/filterByPriceRange")
-	    public List<MatHang> filterByPriceRange(
-	    		@RequestParam(required = false) Integer danhMucId,
-	    		@RequestParam(required = false) Integer nhaSXId,
-	    		@RequestParam List<MatHang> products,
-	    		@RequestParam(required = false) String priceRange,
-	    		@RequestParam(required = false) String sortOrder) {
-	        return matHangService.filterByPriceRange(danhMucId, nhaSXId, products, priceRange, sortOrder);
-	    }
 	
 	@DeleteMapping("/mathang/delete/{id}")
 	public ResponseEntity<String> deleteProducts(@PathVariable Integer id) throws Exception{

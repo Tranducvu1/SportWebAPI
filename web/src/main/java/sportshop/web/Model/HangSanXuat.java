@@ -27,6 +27,7 @@ public class HangSanXuat {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
+	
 	@Column(name = "tenhang", nullable = false)
 	private String tenhang;
 

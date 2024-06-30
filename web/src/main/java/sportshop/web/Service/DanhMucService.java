@@ -3,7 +3,11 @@ package sportshop.web.Service;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import sportshop.web.Model.DanhMuc;
 import sportshop.web.Model.DonHang;
@@ -65,5 +69,28 @@ public class DanhMucService{
 		        }
 		    }
 		    return null; // Trả về null nếu không tìm thấy sản phẩm
+		}
+		public Boolean deleteProduct(Integer id) {
+			Optional<DanhMuc>  danhmuc = danhmucRepository.findById(id);
+			if(danhmuc.isPresent()) {
+				DanhMuc dm = danhmuc.get();
+				danhmucRepository.delete(dm);
+				Boolean existDanhMuc = danhmucRepository.existsById(id);
+				if (!existDanhMuc) {
+	                Log log = new Log();
+	                log.setLogString("Xóa danh mục id = " + id);
+	                log.setCreateTime(new Timestamp(System.currentTimeMillis()));
+	                logRepository.save(log);
+	                return true;
+	            }
+
+			}
+			return null;
+		}
+		
+		public Page<DanhMuc> getDanhMucPagination(int offset,int pageSize){
+			Page<DanhMuc> danhmuc = danhmucRepository.findAll(PageRequest.of(offset, pageSize));
+			return danhmuc;
+			
 		}
 }
