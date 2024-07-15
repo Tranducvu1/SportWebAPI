@@ -37,20 +37,18 @@ private UserService userService;
 			errors.rejectValue("email", "error.email", "Địa chỉ email không phù hợp");
 		}
 		
-		//check emailo đã dùng chưa
+		//check email exits
 		if(userService.findByEmail(user.getEmail()) != null) {
 			errors.rejectValue("email", "error.email", "Địa chỉ email đã được sử dụng");
 		}
 		
-		
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password","error.password","Password không được bỏ trống");
-		// check confirmPassword trống hay không
+		// check confirmPassword isEmpty
 				ValidationUtils.rejectIfEmptyOrWhitespace(errors, "confirmPassword", "error.confirmPassword",
 						"Nhắc lại mật khẩu không được bỏ trống");
-		//check độ dài password 
+		//check long password 
 			if(user.getPassword().length() <8 || user.getPassword().length() >32) {
 				errors.rejectValue("password", "error.password", "Mật khẩu phải dài 8-32 ký tự");
-
 			}
 			// check match pass và confirmPass
 			if (!user.getConfirmPassword().equals(user.getPassword())) {

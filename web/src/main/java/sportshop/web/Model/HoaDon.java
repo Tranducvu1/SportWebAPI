@@ -1,6 +1,5 @@
 package sportshop.web.Model;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

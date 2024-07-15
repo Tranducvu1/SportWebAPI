@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,11 +17,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import sportshop.web.Model.Banner;
-import sportshop.web.Model.MatHang;
 import sportshop.web.Service.BannerService;
 
 @RestController
@@ -36,14 +34,14 @@ public class BannerController {
  }
 
 
-
+ @PreAuthorize("hasRole('ADMIN')")
 @PostMapping(path="/create",produces = "application/json;charset=utf-8")
 public ResponseEntity<Boolean>  taomoi(@RequestBody Banner banner){
 	Boolean result = bannerservice.save(banner);
 	return ResponseEntity.ok(result);
 	
 }
-
+ @PreAuthorize("hasRole('ADMIN')")
 @PutMapping(path="/update/{id}",produces ="application/json;charset = utf-8")
 public ResponseEntity<Boolean> capnhat(@RequestBody @Valid Banner banner ){
 	Boolean result = bannerservice.update(banner);
@@ -56,7 +54,7 @@ public ResponseEntity<Boolean> capnhat(@RequestBody @Valid Banner banner ){
 //	
 //	return ResponseEntity.ok(mathang);
 //
-
+ @PreAuthorize("hasRole('ADMIN')")
 @GetMapping("/find/{id}")
 public ResponseEntity<Object> getIdDanhMuc(@PathVariable("id") Integer id) {
     Banner banner = bannerservice.getById(id);
@@ -67,7 +65,7 @@ public ResponseEntity<Object> getIdDanhMuc(@PathVariable("id") Integer id) {
         return ResponseEntity.notFound().build();
     }
 }
-
+@PreAuthorize("hasRole('ADMIN')")
 @DeleteMapping("/delete/{id}")
 public ResponseEntity<String> deleteProducts(@PathVariable Integer id) throws Exception{
 	try {
@@ -85,7 +83,7 @@ public ResponseEntity<String> deleteProducts(@PathVariable Integer id) throws Ex
 	
 }
 
-
+@PreAuthorize("hasRole('ADMIN')")
 @GetMapping("/pagination/{offset}/{pageSize}")
 private ResponseEntity<Page<Banner>> getBannerPagination(@PathVariable int offset,@PathVariable int pageSize){
 	Page<Banner> banner = bannerservice.getbanner(offset, pageSize);

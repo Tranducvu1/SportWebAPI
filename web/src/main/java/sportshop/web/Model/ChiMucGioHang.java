@@ -10,16 +10,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Data
-@Getter
-@Setter
 @NoArgsConstructor
-@Table(name = "banner")
+@Table(name = "chimucgiohang")
 @JsonIgnoreProperties(value={"hibernateLazyInitializer","handler","fieldHandler"})
 public class ChiMucGioHang {
 	
@@ -29,7 +25,7 @@ public class ChiMucGioHang {
 	
 	@ManyToOne
 	@JoinColumn(name = "ma_san_pham")
-	private MatHang mathang;
+	private MatHang matHang;
 	
 	private int so_luong;
 	

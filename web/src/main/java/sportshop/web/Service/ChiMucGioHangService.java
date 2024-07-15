@@ -21,7 +21,7 @@ public class ChiMucGioHangService {
 	
 	public ChiMucGioHang getChiMucGioHangBySanPhamAndGioHang(MatHang mt,GioHang g)
 	{
-		return repo.findBySanPhamAndGioHang(mt,g);
+		return repo.findByMatHangAndGioHang(mt,g);
 	}
 	
 	public ChiMucGioHang saveChiMucGiohang(ChiMucGioHang c)

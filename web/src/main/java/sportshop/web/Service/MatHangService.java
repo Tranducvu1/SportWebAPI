@@ -1,38 +1,16 @@
 package sportshop.web.Service;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Comparator;
-
-import javax.servlet.http.HttpServletRequest;
-import org.springframework.util.StringUtils;
-import org.springframework.util.unit.DataSize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.querydsl.core.BooleanBuilder;
-
 import sportshop.web.Model.Log;
 import sportshop.web.Model.MatHang;
 import sportshop.web.Repository.LogRepository;
@@ -44,7 +22,7 @@ public class MatHangService {
     @Autowired
     private MatHangRepository mathangRepository;
 
-    private HttpServletRequest request;
+
     
     @Autowired
     private LogRepository logRepository;

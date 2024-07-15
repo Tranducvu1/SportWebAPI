@@ -1,15 +1,6 @@
 package sportshop.web.Controller;
 
 
-import sportshop.web.Model.DanhMuc;
-import sportshop.web.Model.DonHang;
-import sportshop.web.Model.MatHang;
-import sportshop.web.Service.DanhMucService;
-import sportshop.web.Service.MatHangService;
-
-import java.util.List;
-import java.util.Optional;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import sportshop.web.Model.DanhMuc;
+import sportshop.web.Model.MatHang;
+import sportshop.web.Service.DanhMucService;
 
 
 @RestController

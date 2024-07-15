@@ -15,7 +15,7 @@ import sportshop.web.Model.MatHang;
 @Repository
 public interface ChiMucGioHangRepository extends JpaRepository<ChiMucGioHang,Integer>, JpaSpecificationExecutor<ChiMucGioHang> {
 
-	ChiMucGioHang findBySanPhamAndGioHang(MatHang mt, GioHang g);
+	ChiMucGioHang findByMatHangAndGioHang(MatHang mt, GioHang g);
 
 	List<ChiMucGioHang> findByGioHang(GioHang g);
 

@@ -4,11 +4,16 @@ package sportshop.web.Model;
 
 import java.sql.Timestamp;
 
+import javax.validation.constraints.Size;
+
+import org.hibernate.annotations.CreationTimestamp;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -27,11 +32,12 @@ public class Log {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	@Column(name = "log", nullable = false)
+	@Column(name = "log", nullable = false, columnDefinition = "TEXT")
+	@Lob
 	private String logString;
 	
-	
-	@Column(name = "create_time", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false, nullable = false)
+	@Column(name = "create_time", nullable = false, updatable = false)
+	@CreationTimestamp
 	private Timestamp createTime;
 
 }

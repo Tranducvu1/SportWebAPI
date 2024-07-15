@@ -25,12 +25,12 @@ public class GioHang {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+	private Long id;
 	
 	private String tong_tien;
 	
 	@OneToOne
-	@JoinColumn(name = "ma_nguoi_dung")
-	private NguoiDung user;
+	@JoinColumn(name = "user_id")
+	private NguoiDung nguoiDung;
 	
 }

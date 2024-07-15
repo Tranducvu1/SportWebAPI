@@ -1,14 +1,7 @@
 package sportshop.web.Model;
 
-import java.sql.Blob;
 import java.sql.Timestamp;
-import java.util.Set;
-import javax.validation.constraints.NotNull;
 
-import org.springframework.web.multipart.MultipartFile;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
@@ -22,14 +15,10 @@ import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 @Entity
 @Data
 @Table(name = "mathang")
-@Setter
-
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(value={"hibernateLazyInitializer","handler","fieldHandler"})
@@ -46,7 +35,6 @@ public class MatHang {
 	
 	@Column(name = "tenmathang", nullable = false)
 	private String tenmathang;
-	
 	
 	@Column(name = "maphanloai")
 	private String maphanloai;

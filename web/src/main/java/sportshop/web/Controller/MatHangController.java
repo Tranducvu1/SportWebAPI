@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -18,10 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
-import sportshop.web.Model.DanhMuc;
-import sportshop.web.Model.KhachHang;
 import sportshop.web.Model.MatHang;
 import sportshop.web.Service.MatHangService;
 
@@ -30,7 +26,7 @@ import sportshop.web.Service.MatHangService;
 public class MatHangController {
 	@Autowired
 	private MatHangService matHangService;
-	@GetMapping("/mathang")
+	@GetMapping()
 	public ResponseEntity<Object> findAll(){
 		return ResponseEntity.ok(matHangService.findAll());
 	}
@@ -108,10 +104,16 @@ public class MatHangController {
 	    @RequestParam(required = false) Integer hangSanXuatId,
 	    @RequestParam(required = false) String priceRange,
 	    @RequestParam(required = false, defaultValue = "asc") String sortOrder) {
-
+		if(pageSize != 0 && offset != 0) {
 	    Page<MatHang> result = matHangService.filterAndSortProducts(
 	        danhMucId, hangSanXuatId, priceRange, sortOrder ,offset, pageSize);
 	    return ResponseEntity.ok(result);
+		} else {
+			Page<MatHang> result = matHangService.filterAndSortProducts(
+			        danhMucId, hangSanXuatId, priceRange, sortOrder ,0,0);
+			 return ResponseEntity.ok(result);
+		}
+	   
 	}
 	
 	

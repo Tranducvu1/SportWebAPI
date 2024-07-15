@@ -22,7 +22,6 @@ public class EmailUlti {
             helper.setTo(toAddress);
             helper.setSubject(subject);
             helper.setText(content);
-
             mailSender.send(message);
         } catch (MessagingException e) {
             throw new RuntimeException("Không thể gửi email", e);
