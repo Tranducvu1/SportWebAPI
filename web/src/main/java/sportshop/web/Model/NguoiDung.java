@@ -37,6 +37,8 @@ public class NguoiDung implements UserDetails {
   private String lastname;
   private String email;
   private String password;
+  private String sdt;
+  private String address;
   private String confirmPassword;
 
   @Enumerated(EnumType.STRING)

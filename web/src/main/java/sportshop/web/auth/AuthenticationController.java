@@ -28,17 +28,14 @@ public class AuthenticationController {
   ) {
     return ResponseEntity.ok(service.register(request));
   }
-	
   @PostMapping("/signup")
-  public ResponseEntity<String> authenticate(
+  public ResponseEntity<AuthenticationResponse> authenticate(
       @RequestBody AuthenticationRequest request
   ) {
-	  try {
-		  service.authenticate(request);
-		  return ResponseEntity.ok("Login thành công");
-	  } catch (Exception e) {
-          return ResponseEntity.status(500).body("Có lỗi xảy ra: " + e.getMessage());
-      }
+	 
+	  System.out.println("Loggin thành công");
+		  return ResponseEntity.ok(service.authenticate(request));
+	  
   }
 
   @PostMapping("/refresh-token")

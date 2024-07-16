@@ -34,14 +34,14 @@ public class BannerController {
  }
 
 
- @PreAuthorize("hasRole('ADMIN')")
+
 @PostMapping(path="/create",produces = "application/json;charset=utf-8")
 public ResponseEntity<Boolean>  taomoi(@RequestBody Banner banner){
 	Boolean result = bannerservice.save(banner);
 	return ResponseEntity.ok(result);
 	
 }
- @PreAuthorize("hasRole('ADMIN')")
+
 @PutMapping(path="/update/{id}",produces ="application/json;charset = utf-8")
 public ResponseEntity<Boolean> capnhat(@RequestBody @Valid Banner banner ){
 	Boolean result = bannerservice.update(banner);
@@ -65,7 +65,7 @@ public ResponseEntity<Object> getIdDanhMuc(@PathVariable("id") Integer id) {
         return ResponseEntity.notFound().build();
     }
 }
-@PreAuthorize("hasRole('ADMIN')")
+
 @DeleteMapping("/delete/{id}")
 public ResponseEntity<String> deleteProducts(@PathVariable Integer id) throws Exception{
 	try {
@@ -83,7 +83,7 @@ public ResponseEntity<String> deleteProducts(@PathVariable Integer id) throws Ex
 	
 }
 
-@PreAuthorize("hasRole('ADMIN')")
+
 @GetMapping("/pagination/{offset}/{pageSize}")
 private ResponseEntity<Page<Banner>> getBannerPagination(@PathVariable int offset,@PathVariable int pageSize){
 	Page<Banner> banner = bannerservice.getbanner(offset, pageSize);
