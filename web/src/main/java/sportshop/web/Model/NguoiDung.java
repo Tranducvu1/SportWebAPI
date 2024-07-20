@@ -8,6 +8,8 @@ import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -33,20 +35,21 @@ public class NguoiDung implements UserDetails {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  private String firstname;
-  private String lastname;
   private String email;
+  private String hoten;
   private String password;
-  private String sdt;
+  private String confirm_password;
+  private String so_dien_thoai;
   private String address;
-  private String confirmPassword;
-
+  private String dayofbirth;
+  private String Gender;
   @Enumerated(EnumType.STRING)
   private Role role;
-
+  @JsonManagedReference
   @OneToMany(mappedBy = "nguoidung")
   private List<Token> tokens;
 
+  
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return role.getAuthorities();
@@ -81,4 +84,11 @@ public class NguoiDung implements UserDetails {
   public boolean isEnabled() {
     return true;
   }
+
+@Override
+public String toString() {
+	return "NguoiDung [id=" + id + ", email=" + email + ", hoten=" + hoten + ", password=" + password
+			+ ", confirm_password=" + confirm_password + ", so_dien_thoai=" + so_dien_thoai + ", address=" + address
+			+ ", dayofbirth=" + dayofbirth + ", Gender=" + Gender + ", role=" + role + ", tokens=" + tokens + "]";
+}
 }

@@ -2,6 +2,7 @@ package sportshop.web.auth;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -10,12 +11,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.SportWebFullStack.Model.Nguoidung;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import sportshop.web.Config.JwtUtils;
+import sportshop.web.DTO.Role;
 import sportshop.web.Model.Log;
 import sportshop.web.Model.NguoiDung;
 import sportshop.web.Model.Token;
@@ -35,6 +38,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
 	@Autowired
     private final JwtUtils jwtService;
+
 	@Autowired
 	private final AuthenticationManager authenticationManager;
 	@Autowired
@@ -50,13 +54,15 @@ public class AuthenticationService {
                 throw new RuntimeException("Email đã tồn tại");
             } else {
             var user = NguoiDung.builder()
-                    .firstname(request.getFirstname())
-                    .lastname(request.getLastname())
+            		.confirm_password(passwordEncoder.encode(request.getConfirm_password()))
+            		.address(request.getAddress())            
                     .email(request.getEmail())
                     .password(passwordEncoder.encode(request.getPassword()))
+                    .so_dien_thoai(request.getSo_dien_thoai())
                     .role(request.getRole())
+                    .hoten(request.getHoten())
                     .build();
-            
+
             var savedUser = repository.save(user);
             var jwtToken = jwtService.generateToken(user);
             var refreshToken = jwtService.generateRefreshToken(user);
@@ -78,7 +84,7 @@ public class AuthenticationService {
         }
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public AuthenticationResponse login(AuthenticationRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
@@ -87,20 +93,20 @@ public class AuthenticationService {
         );
         var user = repository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
-  
+        System.out.println(user);
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         revokeAllUserTokens(user);
         saveUserToken(user, jwtToken);
-       System.out.println(user.getLastname());
+        Role role = user.getRole();
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
+                .role(role)        
                 .build();
     }
     private void saveUserToken(NguoiDung user, String jwtToken) {
         var token = Token.builder()
-                .nguoidung(user)
                 .token(jwtToken)
                 .tokenType(TokenType.BEARER)
                 .expired(false)
@@ -119,18 +125,16 @@ public class AuthenticationService {
         });
         tokenRepository.saveAll(validUserTokens);
     }
-
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         Log logger = new Log();
-        
+        System.out.println(authHeader);
         if (authHeader == null || !authHeader.startsWith("Bearer")) {
         	logger.setCreateTime(new Timestamp(System.currentTimeMillis()));
             logger.setLogString("Authorization header is missing or does not start with Bearer");
             logRepository.save(logger);
             return;
         }
-
         final String refreshToken = authHeader.substring(7);
         final String userEmail = jwtService.extractUsername(refreshToken);
         logger.setCreateTime(new Timestamp(System.currentTimeMillis()));
@@ -163,7 +167,5 @@ public class AuthenticationService {
             logRepository.save(logger);
         }
     }
-  
-
-
+    	
 }

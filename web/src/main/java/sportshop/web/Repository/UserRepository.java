@@ -1,16 +1,16 @@
 package sportshop.web.Repository;
 
 import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import sportshop.web.Model.NguoiDung;
 
 
 @Repository
-public interface UserRepository  extends JpaRepository<NguoiDung,Integer>, JpaSpecificationExecutor<NguoiDung> {
+public interface UserRepository  extends JpaRepository<NguoiDung,Long>, JpaSpecificationExecutor<NguoiDung> {
 
 //	Page<NguoiDung> findByVaiTro(Set<VaiTro> vaiTro, PageRequest of);
 	//@Query("SELECT DISTINCT n FROM nguoidung n JOIN n.vaiTro v WHERE v IN :vaiTro")

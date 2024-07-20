@@ -26,9 +26,12 @@ import sportshop.web.Service.MatHangService;
 public class MatHangController {
 	@Autowired
 	private MatHangService matHangService;
-	@GetMapping()
-	public ResponseEntity<Object> findAll(){
-		return ResponseEntity.ok(matHangService.findAll());
+	@GetMapping("/mathang")
+	public ResponseEntity<Object> findAll() {
+	    List<MatHang> matHangs = matHangService.findAll();
+	    System.out.println("Number of items: " + matHangs.size());
+	    System.out.println("Data: " + matHangs);
+	    return ResponseEntity.ok(matHangs);
 	}
 	@GetMapping("/mathang/search")
 	public ResponseEntity<Object> SearchByKeyWord(@RequestParam(value = "keyword",required = false)String keyword ){

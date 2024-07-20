@@ -51,7 +51,7 @@ private UserService userService;
 				errors.rejectValue("password", "error.password", "Mật khẩu phải dài 8-32 ký tự");
 			}
 			// check match pass và confirmPass
-			if (!user.getConfirmPassword().equals(user.getPassword())) {
+			if (!user.getConfirm_password().equals(user.getPassword())) {
 				errors.rejectValue("confirmPassword", "error.confirmPassword", "Nhắc lại mật khẩu không chính xác");
 			}
 	}

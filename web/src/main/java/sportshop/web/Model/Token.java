@@ -1,6 +1,8 @@
 package sportshop.web.Model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -36,8 +38,15 @@ public class Token {
   public boolean revoked;
 
   public boolean expired;
-
+  @JsonBackReference
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")
   public NguoiDung nguoidung;
+@Override
+public String toString() {
+	return "Token [id=" + id + ", token=" + token + ", tokenType=" + tokenType + ", revoked=" + revoked + ", expired="
+			+ expired + ", nguoidung=" + nguoidung + "]";
+}
+  
+  
 }

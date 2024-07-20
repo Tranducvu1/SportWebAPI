@@ -13,9 +13,11 @@ import sportshop.web.DTO.Role;
 @NoArgsConstructor
 public class RegisterRequest {
 
-  private String firstname;
-  private String lastname;
+  private String hoten;
+  private String address;
+  private String so_dien_thoai ;
   private String email;
   private String password;
+  private String confirm_password ;
   private Role role;
 }

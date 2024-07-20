@@ -28,15 +28,14 @@ public class AuthTokenFilter extends OncePerRequestFilter{
 	@Override
 	protected void doFilterInternal(@NonNull HttpServletRequest request,@NonNull HttpServletResponse response,@NonNull FilterChain filterChain)
 			throws ServletException, IOException {
-		try {
-			if (request.getServletPath().contains("/api/auth")) {
-				filterChain.doFilter(request, response);
-				return;
-			}
+//Filter focuses only on its main task of validating JWT tokens for requests that need validation.
 			final String authHeader = request.getHeader("Authorization");
 			final String jwt ;
 			final String userEmail;
-			if(authHeader == null || !authHeader.startsWith("Bearer")) {
+			if(authHeader == null || !authHeader.startsWith("Bearer ")) {
+		            filterChain.doFilter(request, response);
+		            return;
+		        }
 				jwt = authHeader.substring(7);
 				userEmail = jwtUtils.extractUsername(jwt);
 				if(userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -51,12 +50,12 @@ public class AuthTokenFilter extends OncePerRequestFilter{
 						SecurityContextHolder.getContext().setAuthentication(authtoken);
 					}
 				}
-				 filterChain.doFilter(request, response);
-			}
-		} catch (Exception e) {
-			System.out.println(e+"Error");
+				 filterChain.doFilter(request, response);	
 		}
-		
 	}
 
-}
+		
+	
+
+
+

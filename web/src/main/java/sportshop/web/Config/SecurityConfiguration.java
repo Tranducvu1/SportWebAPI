@@ -32,9 +32,12 @@ public class SecurityConfiguration {
 	    http
 	    	.csrf(csrf -> csrf.disable())
 	        .authorizeHttpRequests(auth -> 
-	        auth.requestMatchers("/api/auth/**", "/api/auth/register", "/api/auth/signup").permitAll()
-	          .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
-              .requestMatchers("/sport/**").hasAuthority("MEMBER")
+	       // auth.requestMatchers("/api/auth/**", "/api/auth/register", "/api/auth/signup").permitAll()
+//	          .requestMatchers("/api/**").hasAuthority("ADMIN")
+	       // .requestMatchers("/api/**").permitAll()
+ //             .requestMatchers("/sport/**").hasAuthority("MEMBER")
+	       // auth.anyRequest().permitAll()
+	        auth.requestMatchers("/api/**").permitAll()
 	             .anyRequest().authenticated()           
 	        )
 	    .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
@@ -47,5 +50,10 @@ public class SecurityConfiguration {
 	  );
 	    return http.build();
 	  }
-
+//		 http
+//	        .csrf().disable()
+//	        .authorizeRequests()
+//	        .anyRequest().permitAll();
+//		return http.build();
+//	 }
 }

@@ -1,9 +1,13 @@
 package sportshop.web.Service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.example.SportWebFullStack.Model.Nguoidung;
 
 import jakarta.transaction.Transactional;
 import sportshop.web.Model.NguoiDung;
@@ -17,7 +21,11 @@ private UserRepository userRepo;
  @Autowired
 private PasswordEncoder passwordEncoder;
 
-   
+ public List<NguoiDung> findAll(){
+		
+		return userRepo.findAll();
+	}
+ 
     public NguoiDung findByEmail(String email) {
         return userRepo.findByEmail(email)
         		 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
@@ -75,7 +83,7 @@ private PasswordEncoder passwordEncoder;
 //        return userRepo.save(nd);
 //    }
 
-    public void deleteById(Integer id) {
+    public void deleteById(Long id) {
         userRepo.deleteById(id);
     }
 
