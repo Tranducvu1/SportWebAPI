@@ -25,6 +25,7 @@ import sportshop.web.Model.Token;
 import sportshop.web.Repository.LogRepository;
 import sportshop.web.Repository.TokenRepository;
 import sportshop.web.Repository.UserRepository;
+import sportshop.web.Service.UserService;
 import sportshop.web.token.TokenType;
 
 @Service
@@ -32,6 +33,8 @@ import sportshop.web.token.TokenType;
 public class AuthenticationService {
 	@Autowired
     private final UserRepository repository;
+	@Autowired
+    private final UserService userService;
 	@Autowired
     private final TokenRepository tokenRepository;
 	@Autowired
@@ -93,18 +96,31 @@ public class AuthenticationService {
         );
         var user = repository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        System.out.println(user);
+        System.out.println("test"+user);
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         revokeAllUserTokens(user);
         saveUserToken(user, jwtToken);
         Role role = user.getRole();
+        String email = user.getEmail();
+        String hoten = user.getHoten();
+        String so_dien_thoai = user.getSo_dien_thoai();
+        String address = user.getAddress();
+        String gender = user.getGender();
+        String dayofbirrth = user.getDayofbirth();
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
-                .role(role)        
+                .role(role)   
+                .address(address)
+                .email(email)
+                .hoten(hoten)
+                .Gender(gender)
+                .so_dien_thoai(so_dien_thoai)
+                .dayofbirth(dayofbirrth)
                 .build();
     }
+    
     private void saveUserToken(NguoiDung user, String jwtToken) {
         var token = Token.builder()
                 .token(jwtToken)

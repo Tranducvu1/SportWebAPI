@@ -42,11 +42,17 @@ public class Token {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")
   public NguoiDung nguoidung;
-@Override
-public String toString() {
-	return "Token [id=" + id + ", token=" + token + ", tokenType=" + tokenType + ", revoked=" + revoked + ", expired="
-			+ expired + ", nguoidung=" + nguoidung + "]";
-}
+
   
+  @Override
+  public String toString() {
+      return "Token{" +
+             "id=" + id +
+             ", token='" + token + '\'' +
+             ", tokenType=" + tokenType +
+             ", revoked=" + revoked +
+             ", expired=" + expired +
+             '}';
+  }
   
 }

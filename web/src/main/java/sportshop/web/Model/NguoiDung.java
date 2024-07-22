@@ -91,4 +91,7 @@ public String toString() {
 			+ ", confirm_password=" + confirm_password + ", so_dien_thoai=" + so_dien_thoai + ", address=" + address
 			+ ", dayofbirth=" + dayofbirth + ", Gender=" + Gender + ", role=" + role + ", tokens=" + tokens + "]";
 }
+  
+  
+
 }
