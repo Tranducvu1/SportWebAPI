@@ -29,28 +29,12 @@ public class DonHangService {
 	private DonHangRepository DonHangRepository;
 	@Autowired
 	LogRepository logRepository;
-	@Autowired
-	private MatHangRepository mathangRepository;
 	//getall
 	public List<DonHang> findAll(){
 		return DonHangRepository.findAll();
 	}
 	
-	 public DonHang addToCart(Integer id) {
-	  
-	       MatHang matHang = mathangRepository.findById(id).get();
-	       
-	      DonHang donhang = DonHangRepository.findById(id).orElse(null);
-	       
-	      if (matHang == null) {
-	    	   new DonHang();
-	    	   donhang.setSoluong(1);
-	        } else {
-	        	
-	        	donhang.setSoluong(donhang.getSoluong()+1);
-	        }
-	        return DonHangRepository.save(donhang);
-	 }
+	 
 	//search by name
 	 public List<DonHang> searchByKeyword(String Keyword) {
 		 return DonHangRepository.searchByKeyword(Keyword);
@@ -58,6 +42,7 @@ public class DonHangService {
 	 
 		
 	 public Boolean save(DonHang donhang) {
+		 donhang.setNgaydat(new Timestamp(System.currentTimeMillis()));
 		 DonHang DonHangs = DonHangRepository.save(donhang);
 		 if (DonHangs != null) {
 				Log log = new Log();

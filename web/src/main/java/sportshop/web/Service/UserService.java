@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.SportWebFullStack.Model.Nguoidung;
+
 
 import jakarta.transaction.Transactional;
 import sportshop.web.Model.NguoiDung;
@@ -86,6 +86,11 @@ private PasswordEncoder passwordEncoder;
     public void deleteById(Long id) {
         userRepo.deleteById(id);
     }
+    
+    public NguoiDung searchByEmail(String username) {
+        return userRepo.searchByEmail(username);
+    }
+
 
 	
 }

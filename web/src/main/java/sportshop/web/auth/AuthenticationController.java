@@ -3,6 +3,7 @@ package sportshop.web.auth;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -13,13 +14,14 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.SportWebFullStack.Model.Nguoidung;
+
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import sportshop.web.Config.JwtUtils;
 import sportshop.web.Config.LogoutService;
 import sportshop.web.Model.NguoiDung;
+import sportshop.web.Repository.UserRepository;
 import sportshop.web.Service.UserService;
 
 
@@ -31,10 +33,12 @@ public class AuthenticationController {
 	@Autowired
 	private UserService userService;
 	@Autowired
-	private LogoutService logoutService;
-	@Autowired
 	private JwtUtils jwtUtils;
-	 @GetMapping("/getAll")
+	@Autowired
+	private UserRepository userRepository;
+	@Autowired
+	private LogoutService logoutService;
+	@GetMapping("/getAll")
 	 public ResponseEntity<Object> findall(){
 		return ResponseEntity.ok(userService.findAll());	 
 	 }
@@ -49,25 +53,22 @@ public class AuthenticationController {
   public ResponseEntity<AuthenticationResponse> login(
       @RequestBody AuthenticationRequest request
   ) {
-	  
-	 
 		  return ResponseEntity.ok(service.login(request));
 	  
   }
-  
-  @GetMapping("/profile")
-  public ResponseEntity<?> getProfile(@RequestHeader("Authorization") String authHeader) {
-      try {
-          String token = authHeader.substring(7); 
-          String email = jwtUtils.getEmailFromToken(token);
-          NguoiDung nguoidung = userService.findByEmail(email);
-          return ResponseEntity.ok(nguoidung);
-      } catch (Exception e) {
-          return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token không hợp lệ");
-      }
+  @GetMapping("/userdetails")
+  public ResponseEntity<?> getUserDetails(@RequestHeader("Authorization") String token) {
+	  System.out.println(token);
+      String username = jwtUtils.extractEmail(token.substring(7));
+      System.out.println("username "+username);
+      NguoiDung user = userRepository.searchByEmail(username);
+      	System.out.println( "hi"+user);
+      			RegisterRequest userDetailsResponse = new RegisterRequest(user.getId(),
+          user.getHoten(), user.getEmail(), user.getSo_dien_thoai(), user.getAddress(),
+          user.getHoten(), user.getGender(), null, user.getDayofbirth(), user.getHinhdaidien()
+      );
+      return ResponseEntity.ok(userDetailsResponse);
   }
-  
-
   @PostMapping("/refresh-token")
   public void refreshToken(
       HttpServletRequest request,

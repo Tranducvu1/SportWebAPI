@@ -2,8 +2,6 @@ package sportshop.web.auth;
 
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,7 +9,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.SportWebFullStack.Model.Nguoidung;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,7 +23,6 @@ import sportshop.web.Model.Token;
 import sportshop.web.Repository.LogRepository;
 import sportshop.web.Repository.TokenRepository;
 import sportshop.web.Repository.UserRepository;
-import sportshop.web.Service.UserService;
 import sportshop.web.token.TokenType;
 
 @Service
@@ -33,8 +30,6 @@ import sportshop.web.token.TokenType;
 public class AuthenticationService {
 	@Autowired
     private final UserRepository repository;
-	@Autowired
-    private final UserService userService;
 	@Autowired
     private final TokenRepository tokenRepository;
 	@Autowired
@@ -107,10 +102,12 @@ public class AuthenticationService {
         String so_dien_thoai = user.getSo_dien_thoai();
         String address = user.getAddress();
         String gender = user.getGender();
+        Long id = user.getId();
         String dayofbirrth = user.getDayofbirth();
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
+                .id(id)
                 .role(role)   
                 .address(address)
                 .email(email)
@@ -152,7 +149,7 @@ public class AuthenticationService {
             return;
         }
         final String refreshToken = authHeader.substring(7);
-        final String userEmail = jwtService.extractUsername(refreshToken);
+        final String userEmail = jwtService.extractEmail(refreshToken);
         logger.setCreateTime(new Timestamp(System.currentTimeMillis()));
         logger.setLogString("Authorization header found and token extracted");
         logRepository.save(logger);

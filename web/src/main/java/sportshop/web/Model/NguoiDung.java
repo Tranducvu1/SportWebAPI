@@ -35,6 +35,7 @@ public class NguoiDung implements UserDetails {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+  private String hinhdaidien;
   private String email;
   private String hoten;
   private String password;

@@ -4,9 +4,9 @@ package sportshop.web.Model;
 
 import java.sql.Timestamp;
 
-import javax.validation.constraints.Size;
-
 import org.hibernate.annotations.CreationTimestamp;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Email;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
