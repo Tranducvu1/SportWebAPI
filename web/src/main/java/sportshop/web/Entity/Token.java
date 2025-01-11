@@ -1,8 +1,8 @@
-package sportshop.web.Model;
-
+package sportshop.web.Entity;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -23,6 +23,8 @@ import sportshop.web.token.TokenType;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@DynamicInsert
+@DynamicUpdate
 public class Token {
 
   @Id

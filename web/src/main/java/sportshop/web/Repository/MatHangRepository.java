@@ -7,25 +7,30 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import sportshop.web.Model.DanhMuc;
-import sportshop.web.Model.HangSanXuat;
-import sportshop.web.Model.MatHang;
+import sportshop.web.Entity.DanhMuc;
+import sportshop.web.Entity.HangSanXuat;
+import sportshop.web.Entity.MatHang;
 
 
+@RedisHash("matHang")
 @Repository
 public interface MatHangRepository extends JpaRepository<MatHang,Integer>, JpaSpecificationExecutor<MatHang> {
 	//search keyword không phân biệt chữ hoa hay thương
-	@Query("SELECT mh FROM MatHang mh WHERE LOWER(mh.tenmathang) LIKE LOWER(CONCAT('%', :keyword, '%'))") 
-	List<MatHang> searchByKeyword(@Param("keyword") String keyword);
+	// @Query("SELECT mh FROM MatHang mh WHERE LOWER(mh.tenmathang) LIKE LOWER(CONCAT('%', :keyword, '%'))") 
+	// List<MatHang> searchByKeyword(@Param("keyword") String keyword);
 
     @Query("SELECT m FROM MatHang m LEFT JOIN FETCH m.danhMuc WHERE m.id = :id")
     MatHang findByIdWithDanhMuc(@Param("id") Integer id);
     
-    @Query("SELECT p FROM MatHang p WHERE p.dongia BETWEEN :fromPrice AND :toPrice")
-    List<MatHang> findByPriceRange(double fromPrice, double toPrice);
+    // @Query("SELECT p FROM MatHang p WHERE p.dongia BETWEEN :fromPrice AND :toPrice")
+    // List<MatHang> findByPriceRange(double fromPrice, double toPrice);
+    
+    List<MatHang> findByDongiaBetween(double fromPrice, double toPrice);
+
     
     List<MatHang> findByDanhMucId(Integer categoryId);
     
@@ -34,6 +39,9 @@ public interface MatHangRepository extends JpaRepository<MatHang,Integer>, JpaSp
 	Page<MatHang> findByHangSanXuat(HangSanXuat hangSanXuat, PageRequest of);
 
 	boolean existsById(Long id);
+
+
+    List<MatHang> findByTenmathangContainingIgnoreCase(String keyword);
 
 	//List<MatHang> findByDanhMuc(DanhMuc danhMuc);
 }

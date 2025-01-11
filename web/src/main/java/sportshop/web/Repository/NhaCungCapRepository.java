@@ -8,8 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-
-import sportshop.web.Model.NhaCungCap;
+import sportshop.web.Entity.NhaCungCap;
 
 @Repository
 public interface NhaCungCapRepository extends JpaRepository<NhaCungCap,Integer>, JpaSpecificationExecutor<NhaCungCap> {

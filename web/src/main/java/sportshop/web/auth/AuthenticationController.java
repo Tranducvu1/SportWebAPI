@@ -3,8 +3,6 @@ package sportshop.web.auth;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,13 +18,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import sportshop.web.Config.JwtUtils;
 import sportshop.web.Config.LogoutService;
-import sportshop.web.Model.NguoiDung;
+import sportshop.web.Entity.NguoiDung;
 import sportshop.web.Repository.UserRepository;
 import sportshop.web.Service.UserService;
 
-
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/v1/auth")
 public class AuthenticationController {
 	@Autowired
   private AuthenticationService service;

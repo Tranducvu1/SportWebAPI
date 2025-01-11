@@ -1,9 +1,7 @@
-package sportshop.web.Model;
-
-import java.time.LocalDate;
-
+package sportshop.web.Entity;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,41 +18,34 @@ import lombok.Setter;
 @Data
 @Getter
 @Setter
+@DynamicInsert
+@DynamicUpdate
 @NoArgsConstructor
-@Table(name = "hoadon")
+@Table(name = "nhacungcap")
 @JsonIgnoreProperties(value={"hibernateLazyInitializer","handler","fieldHandler"})
-public class HoaDon {
+public class NhaCungCap {
 	@Id
 	@Column(name = "id", nullable = false)
 	@PrimaryKeyJoinColumn(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-
-	@Column(name = "mahoadon", nullable = false)
-	private String mahoadon;
 	
+	@Column(name = "manhacungcap", nullable = false)
+	private String manhacungcap;
 	
-	@Column(name = "ngaygiaodich", nullable = false)
-	private LocalDate ngaygiaodich;
 	
 	@Column(name = "mamathang", nullable = false)
 	private String mamathang;
 	
-	@Column(name = "motagiaodich", nullable = false)
-	private String motagiaodich;
 	
-	@Column(name = "soluong", nullable = false)
-	private Long soluong;
+	@Column(name = "tennhacungcap", nullable = false)
+	private String tennhacungcap;
 	
-	@Column(name = "giamgia", nullable = false)
-	private int giamgia;
+	@Column(name = "diachi", nullable = false)
+	private String diachi;
 	
-	@Column(name = "maphuongthucvanchuyen", nullable = false)
-	private String maphuongthucvanchuyen;
 	
-	@Column(name = "phivanchuyen", nullable = false)
-	private Long phivanchuyen;
 	
-	@Column(name = "tongtien", nullable = false)
-	private Long tongtien;
+	@Column(name = "sdt", nullable = false)
+	private String sdt;
 }

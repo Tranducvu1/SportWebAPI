@@ -13,7 +13,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class TaiKhoanDTO {
-	
 	private String id;
 	
 	@NotEmpty(message="Phải nhập địa chỉ email")

@@ -1,39 +1,38 @@
-package sportshop.web.Model;
+package sportshop.web.Entity;
+
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Data
-@Getter
-@Setter
 @NoArgsConstructor
-@Table(name = "giohang")
+@DynamicInsert
+@DynamicUpdate
+@Table(name = "banner")
 @JsonIgnoreProperties(value={"hibernateLazyInitializer","handler","fieldHandler"})
-public class GioHang {
-	
+public class Banner {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	@Column(name = "id", nullable = false)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 	
-	private String tensanpham;
+	@Column(name = "hinhanh", nullable = false)
 	private String hinhanh;
-	private String dongia;
-	private Long soluong;
-	private Long tongtien;
-	@OneToOne
-	@JoinColumn(name = "user_id")
-	private NguoiDung nguoiDung;
+
+	@Column(name = "mota")
+	private String mota;
 	
+		
 }
+

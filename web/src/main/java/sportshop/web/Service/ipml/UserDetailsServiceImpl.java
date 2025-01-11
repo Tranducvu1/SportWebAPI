@@ -1,4 +1,4 @@
-package sportshop.web.Service;
+package sportshop.web.Service.ipml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -7,7 +7,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import sportshop.web.Model.NguoiDung;
 import sportshop.web.Repository.UserRepository;
 
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         // Tìm user theo email
-        NguoiDung user = userRepository.findByEmail(email)
+        sportshop.web.Entity.NguoiDung user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 
         // Tạo danh sách các quyền

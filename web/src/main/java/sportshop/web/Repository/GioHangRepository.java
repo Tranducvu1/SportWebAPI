@@ -4,9 +4,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
-import sportshop.web.Model.ChiMucGioHang;
-import sportshop.web.Model.GioHang;
-import sportshop.web.Model.NguoiDung;
+import sportshop.web.Entity.ChiMucGioHang;
+import sportshop.web.Entity.GioHang;
+import sportshop.web.Entity.NguoiDung;
 
 
 @Repository

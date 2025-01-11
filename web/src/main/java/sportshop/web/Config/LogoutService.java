@@ -39,10 +39,7 @@ private static final Logger logger = LoggerFactory.getLogger(LogoutService.class
 	} catch (Exception e) {
 		// TODO: handle exception
 		logger.error("Error during logout"+e);
-	}
-		
-		
-		
+	}	
 	}
 
 }

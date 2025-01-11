@@ -23,16 +23,12 @@ public class MatHangDtoValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         MatHangDto mh = (MatHangDto) target;
-
         ValidationUtils.rejectIfEmpty(errors, "tenmathang", "error.tenmathang", "Tên sản phẩm không được trống");
         ValidationUtils.rejectIfEmpty(errors, "dongia", "error.dongia", "Đơn giá không được trống");
         ValidationUtils.rejectIfEmpty(errors, "soluong", "error.soluong", "Số lượng không được trống");
         ValidationUtils.rejectIfEmpty(errors, "mota", "error.mota", "Mô tả không được trống");
-
         if (mh.getDongia() != null && mh.getDongia() < 0) {
             errors.rejectValue("dongia", "error.dongia", "Đơn giá không được âm");
-        }
-
-       
+        }  
     }
 }

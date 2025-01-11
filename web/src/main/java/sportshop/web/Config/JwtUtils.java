@@ -75,8 +75,8 @@ public class JwtUtils {
     }
    
     // Generate a token
-    public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+    public String generateToken(Object user) {
+        return generateToken(new HashMap<>());
     }
 
     // Generate a refresh token for given user details

@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import sportshop.web.DTO.PasswordDTO;
-import sportshop.web.Model.NguoiDung;
-import sportshop.web.Model.ResponseObject;
+import sportshop.web.Entity.NguoiDung;
+import sportshop.web.Entity.ResponseObject;
 import sportshop.web.Service.UserService;
 
 
@@ -30,7 +30,7 @@ public class ProfileController {
 
 
 @RestController
-@RequestMapping("/api/profile")
+@RequestMapping("/api/v1/profile")
 public class ProfileApi {
 
 	@Autowired
@@ -40,7 +40,7 @@ public class ProfileApi {
 	private BCryptPasswordEncoder passwordEncoder;
 
 	@GetMapping("/{id}")
-	public NguoiDung getNguoiDungById(@PathVariable Integer id) {
+	public NguoiDung getNguoiDungById(@PathVariable Long id) {
 		NguoiDung nd = nguoiDungService.findById(id);
 		return nd;
 	}

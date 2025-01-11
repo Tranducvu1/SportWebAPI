@@ -1,8 +1,5 @@
 package sportshop.web.Controller;
 
-
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -18,89 +15,127 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import sportshop.web.Model.DanhMuc;
-import sportshop.web.Model.MatHang;
+import sportshop.web.Entity.DanhMuc;
+import sportshop.web.Entity.MatHang;
 import sportshop.web.Service.DanhMucService;
 
-
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1/danhmuc")
 public class DanhmucController {
- @Autowired
- private DanhMucService danhMucService;
- @GetMapping("/danhmuc")
- public ResponseEntity<Object> findall(){
-	return ResponseEntity.ok(danhMucService.findAll());	 
- }
+    
+    // Injecting the DanhMucService to handle business logic for category management
+    @Autowired
+    private DanhMucService danhMucService;
 
-
- 
-@PostMapping(path="/danhmuc/create",produces = "application/json;charset=utf-8")
-public ResponseEntity<Boolean>  taomoi(@RequestBody DanhMuc danhmuc){
-	System.out.println(danhmuc);
-	Boolean result = danhMucService.save(danhmuc);
-	return ResponseEntity.ok(result);
-	
-}
-
-@GetMapping("/danhmuc/{danhMucId}/products/{productId}")
-public ResponseEntity<Object> getIdDanhMuc(@PathVariable("danhMucId") Integer danhMucId, 
-                                           @PathVariable("productId") Integer productId) {
-    DanhMuc danhmuc = danhMucService.getById(danhMucId);
-    if (danhmuc != null) {
-        MatHang product = danhMucService.getProductByIdFromCategory(danhmuc, productId);
-        return ResponseEntity.ok(product);
-    } else {
-        return ResponseEntity.notFound().build();
+    /**
+     * Retrieves all categories from the database.
+     * 
+     * @return ResponseEntity with a list of all categories.
+     */
+    @GetMapping()
+    public ResponseEntity<Object> findAll() {
+        return ResponseEntity.ok(danhMucService.findAll());
     }
-}
 
+    /**
+     * Creates a new category in the system.
+     * 
+     * @param danhmuc - The category object to be created.
+     * @return ResponseEntity indicating whether the category was successfully created.
+     */
+    @PostMapping(path="/danhmuc/create", produces = "application/json;charset=utf-8")
+    public ResponseEntity<Boolean> createCategory(@RequestBody DanhMuc danhmuc) {
+        System.out.println(danhmuc);
+        Boolean result = danhMucService.save(danhmuc);
+        return ResponseEntity.ok(result);
+    }
 
-@PutMapping(path="/danhmuc/update",  consumes = "application/json",produces ="application/json;charset = utf-8")
-public ResponseEntity<Boolean> capnhat(@RequestBody @Valid DanhMuc danhmuc){
-	Boolean result = danhMucService.update(danhmuc);
-	return ResponseEntity.ok(result);
-	
-}
-
-
-@GetMapping("/danhmuc/{id}")
-public DanhMuc getDanhMucById(@PathVariable("id") Integer id) {
-	return danhMucService.getById(id);
-}
-
-
-
-
-@GetMapping("/danhmuc/search")
-public ResponseEntity<Object> findByKeyWord(@RequestParam(value = "keyword",required = false) String keyword){		
-	return ResponseEntity.ok(danhMucService.searchByKeyword(keyword)); 
-}
-
-@DeleteMapping("/danhmuc/delete/{id}")
-public ResponseEntity<String> deleteProducts(@PathVariable Integer id) {
-    try {
-        Boolean isDeleted = danhMucService.deleteProduct(id);
-        if(isDeleted) {
-            return ResponseEntity.ok("Xóa thành công");
+    /**
+     * Retrieves a product from a specific category by their IDs.
+     * 
+     * @param danhMucId - The ID of the category.
+     * @param productId - The ID of the product.
+     * @return ResponseEntity with the product if found, or a 404 status if not.
+     */
+    @GetMapping("/danhmuc/{danhMucId}/products/{productId}")
+    public ResponseEntity<Object> getProductByCategory(@PathVariable("danhMucId") Integer danhMucId, 
+                                                       @PathVariable("productId") Integer productId) {
+        DanhMuc category = danhMucService.getById(danhMucId);
+        if (category != null) {
+            MatHang product = danhMucService.getProductByIdFromCategory(category, productId);
+            return ResponseEntity.ok(product);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Danh mục không tồn tại");
+            return ResponseEntity.notFound().build();
         }
-    } catch (Exception e) {
-        // Log the exception
-        e.printStackTrace(); // This will print the stack trace to your server logs
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                             .body("Đã xảy ra lỗi: " + e.getMessage());
     }
-}
 
+    /**
+     * Updates an existing category with new data.
+     * 
+     * @param danhmuc - The updated category object.
+     * @return ResponseEntity indicating whether the update was successful.
+     */
+    @PutMapping(path="/danhmuc/update", consumes = "application/json", produces = "application/json;charset=utf-8")
+    public ResponseEntity<Boolean> updateCategory(@RequestBody @Valid DanhMuc danhmuc) {
+        Boolean result = danhMucService.update(danhmuc);
+        return ResponseEntity.ok(result);
+    }
 
-@GetMapping("/danhmuc/pagination/{offset}/{pageSize}")
-public ResponseEntity<Page<DanhMuc>> DanhMucPagination(@PathVariable int offset,@PathVariable int pageSize){
-	Page<DanhMuc> dm = danhMucService.getDanhMucPagination(offset, pageSize);
-	return ResponseEntity.ok(dm);
-	
-}
+    /**
+     * Retrieves a category by its ID.
+     * 
+     * @param id - The ID of the category to retrieve.
+     * @return The category object if found, otherwise a 404 status.
+     */
+    @GetMapping("/danhmuc/{id}")
+    public DanhMuc getCategoryById(@PathVariable("id") Integer id) {
+        return danhMucService.getById(id);
+    }
 
+    /**
+     * Searches for categories based on a keyword.
+     * 
+     * @param keyword - The keyword used to filter categories.
+     * @return ResponseEntity with a list of matching categories.
+     */
+    @GetMapping("/danhmuc/search")
+    public ResponseEntity<Object> findByKeyword(@RequestParam(value = "keyword", required = false) String keyword) {        
+        return ResponseEntity.ok(danhMucService.searchByKeyword(keyword));
+    }
 
+    /**
+     * Deletes a category by its ID.
+     * 
+     * @param id - The ID of the category to be deleted.
+     * @return ResponseEntity indicating the outcome of the deletion operation.
+     */
+    @DeleteMapping("/danhmuc/delete/{id}")
+    public ResponseEntity<String> deleteCategory(@PathVariable Integer id) {
+        try {
+            Boolean isDeleted = danhMucService.deleteProduct(id);
+            if(isDeleted) {
+                return ResponseEntity.ok("Category deleted successfully");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Category not found");
+            }
+        } catch (Exception e) {
+            // Log the exception
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                 .body("An error occurred: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Retrieves categories with pagination support.
+     * 
+     * @param offset - The starting point for pagination.
+     * @param pageSize - The number of categories per page.
+     * @return ResponseEntity with the paginated categories.
+     */
+    @GetMapping("/danhmuc/pagination/{offset}/{pageSize}")
+    public ResponseEntity<Page<DanhMuc>> getCategoryPagination(@PathVariable int offset, @PathVariable int pageSize) {
+        Page<DanhMuc> categories = danhMucService.getDanhMucPagination(offset, pageSize);
+        return ResponseEntity.ok(categories);
+    }
 }

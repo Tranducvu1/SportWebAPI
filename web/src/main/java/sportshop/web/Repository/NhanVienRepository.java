@@ -9,8 +9,7 @@ import org.springframework.data.jpa.repository.support.JpaRepositoryFactory;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-
-import sportshop.web.Model.NhanVien;
+import sportshop.web.Entity.NhanVien;
 
 
 @Repository

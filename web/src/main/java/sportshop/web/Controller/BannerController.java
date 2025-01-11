@@ -1,93 +1,115 @@
 package sportshop.web.Controller;
 
-
-
-
-
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
-import sportshop.web.Model.Banner;
+import sportshop.web.Entity.Banner;
 import sportshop.web.Service.BannerService;
 
 @RestController
-@RequestMapping("/api/banner")
+@RequestMapping("/api/v1/banner")
 public class BannerController {
- @Autowired
- private BannerService bannerservice;
- 
- @GetMapping()
- public ResponseEntity<Object> findall(){
-	return ResponseEntity.ok(bannerservice.findAll());	 
- }
+    
+    @Autowired
+    private BannerService bannerService;
 
-
-
-@PostMapping(path="/create",produces = "application/json;charset=utf-8")
-public ResponseEntity<Boolean>  taomoi(@RequestBody Banner banner){
-	Boolean result = bannerservice.save(banner);
-	return ResponseEntity.ok(result);
-	
-}
-
-@PutMapping(path="/update/{id}",produces ="application/json;charset = utf-8")
-public ResponseEntity<Boolean> capnhat(@RequestBody @Valid Banner banner ){
-	Boolean result = bannerservice.update(banner);
-	return ResponseEntity.ok(result);
-	
-}
-//@GetMapping("/mathang/pagination/{offset}/{pageSize}")
-//private ResponseEntity<Page<MatHang>> getProductsWithSort(@PathVariable int offset, @PathVariable int pageSize,@RequestParam(required = false) Integer danhMucId){
-//	Page<MatHang> mathang = matHangService.getMatHangByDanhMuc(offset, pageSize);
-//	
-//	return ResponseEntity.ok(mathang);
-//
- @PreAuthorize("hasRole('ADMIN')")
-@GetMapping("/find/{id}")
-public ResponseEntity<Object> getIdDanhMuc(@PathVariable("id") Integer id) {
-    Banner banner = bannerservice.getById(id);
-    if (banner != null) {
-     
-        return ResponseEntity.ok(banner);
-    } else {
-        return ResponseEntity.notFound().build();
+    /**
+     * Retrieves all banners from the cache or from the database if not cached.
+     * 
+     * @return ResponseEntity containing all banners.
+     */
+    @Cacheable(value = "banners")
+    @GetMapping()
+    public ResponseEntity<Object> findAll() {
+        return ResponseEntity.ok(bannerService.findAll());
     }
-}
 
-@DeleteMapping("/delete/{id}")
-public ResponseEntity<String> deleteProducts(@PathVariable Integer id) throws Exception{
-	try {
-			Boolean isDeleted = bannerservice.deleteBanner(id);
-			if(isDeleted) {
-				return ResponseEntity.ok("Xóa thành công");
-			} else {
-				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Sản phẩm không tồn tại");
-			}
-	} catch (Exception e) {
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Đã xảy ra lỗi");
-	}
-	
-	
-	
-}
+    /**
+     * Creates a new banner in the system and clears the cache for "banners".
+     * 
+     * @param banner - The banner object to be created.
+     * @return ResponseEntity indicating whether the creation was successful.
+     */
+    @CacheEvict(value = "banners", allEntries = true) // Clear cache when a new banner is added
+    @PostMapping(path = "/create", produces = "application/json;charset=utf-8")
+    public ResponseEntity<Boolean> create(@RequestBody Banner banner) {
+        Boolean result = bannerService.save(banner);
+        return ResponseEntity.ok(result);
+    }
 
+    /**
+     * Updates an existing banner in the system and clears the cache for "banners".
+     * 
+     * @param id     - The ID of the banner to be updated.
+     * @param banner - The updated banner object.
+     * @return ResponseEntity indicating whether the update was successful.
+     */
+    @CacheEvict(value = "banners", allEntries = true) // Clear cache when banner is updated
+    @PutMapping(path = "/update/{id}", produces = "application/json;charset=utf-8")
+    public ResponseEntity<Boolean> update(@PathVariable("id") Integer id, @RequestBody @Valid Banner banner) {
+        banner.setId(id);
+        Boolean result = bannerService.update(banner);
+        return ResponseEntity.ok(result);
+    }
 
-@GetMapping("/pagination/{offset}/{pageSize}")
-private ResponseEntity<Page<Banner>> getBannerPagination(@PathVariable int offset,@PathVariable int pageSize){
-	Page<Banner> banner = bannerservice.getbanner(offset, pageSize);
-	return ResponseEntity.ok(banner);
-}
+    /**
+     * Retrieves a banner by its ID from the cache, or the database if not cached.
+     * Access is restricted to users with the 'ADMIN' role.
+     * 
+     * @param id - The ID of the banner to retrieve.
+     * @return ResponseEntity containing the banner if found, or a 404 status if not.
+     */
+    @PreAuthorize("hasRole('ADMIN')")
+    @Cacheable(value = "bannerById", key = "#id") // Cache result by banner ID
+    @GetMapping("/find/{id}")
+    public ResponseEntity<Object> getById(@PathVariable("id") Integer id) {
+        Banner banner = bannerService.getById(id);
+        if (banner != null) {
+            return ResponseEntity.ok(banner);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    /**
+     * Deletes a banner by its ID and clears the cache for "banners".
+     * 
+     * @param id - The ID of the banner to be deleted.
+     * @return ResponseEntity indicating whether the deletion was successful or not.
+     */
+    @CacheEvict(value = "banners", allEntries = true) // Clear cache when banner is deleted
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> delete(@PathVariable Integer id) throws Exception {
+        try {
+            Boolean isDeleted = bannerService.deleteBanner(id);
+            if (isDeleted) {
+                return ResponseEntity.ok("Banner deleted successfully.");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Banner not found.");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Retrieves banners with pagination and caches the result.
+     * 
+     * @param offset   - The starting point for pagination.
+     * @param pageSize - The number of banners per page.
+     * @return ResponseEntity containing the paginated list of banners.
+     */
+    @Cacheable(value = "bannerPagination", key = "{#offset, #pageSize}")
+    @GetMapping("/pagination/{offset}/{pageSize}")
+    private ResponseEntity<Page<Banner>> getBannerPagination(@PathVariable int offset, @PathVariable int pageSize) {
+        Page<Banner> banners = bannerService.getBanner(offset, pageSize);
+        return ResponseEntity.ok(banners);
+    }
 }

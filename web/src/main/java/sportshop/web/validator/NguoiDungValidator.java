@@ -7,7 +7,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import sportshop.web.Model.NguoiDung;
+import sportshop.web.Entity.NguoiDung;
 import sportshop.web.Service.UserService;
 
 public class NguoiDungValidator implements Validator {

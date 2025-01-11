@@ -1,26 +1,12 @@
 package sportshop.web.Service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import sportshop.web.Entity.ChiMucGioHang;
+import sportshop.web.Entity.GioHang;
+import sportshop.web.Entity.NguoiDung;
 
-import sportshop.web.Model.ChiMucGioHang;
-import sportshop.web.Model.GioHang;
-import sportshop.web.Model.NguoiDung;
-import sportshop.web.Repository.GioHangRepository;
+public interface GioHangService {
 
+    ChiMucGioHang getGioHangByNguoiDung(NguoiDung n);
 
-@Service
-public class GioHangService {
-	@Autowired
-	private GioHangRepository repo;
-	
-	public ChiMucGioHang getGioHangByNguoiDung(NguoiDung n)
-	{
-		return repo.findByNguoiDung(n);
-	}
-	
-	public GioHang save(GioHang g)
-	{
-		return repo.save(g);
-	}
+    GioHang save(GioHang g);
 }

@@ -12,12 +12,11 @@ import sportshop.web.DTO.EmailRequest;
 import sportshop.web.Service.EmailService;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 public class EmailController {
 
     @Autowired
     private EmailService emailService;
-
     @PostMapping("/send-email")
     public ResponseEntity<String> sendEmail(@RequestBody EmailRequest emailRequest) {
         try {

@@ -9,8 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import sportshop.web.Model.Banner;
-import sportshop.web.Model.HangSanXuat;
+import sportshop.web.Entity.Banner;
+import sportshop.web.Entity.HangSanXuat;
 
 @Repository
 public interface HangSanXuatRepository extends JpaRepository<HangSanXuat,Integer>, JpaSpecificationExecutor<HangSanXuat> {

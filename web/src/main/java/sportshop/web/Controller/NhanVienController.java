@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import sportshop.web.Model.NhanVien;
+import sportshop.web.Entity.NhanVien;
 import sportshop.web.Service.NhanVienService;
 
 @RestController
-@RequestMapping("/api/nhanvien")
+@RequestMapping("/api/v1/nhanvien")
 public class NhanVienController {
 
 	

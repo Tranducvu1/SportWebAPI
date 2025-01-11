@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import sportshop.web.Model.DanhMuc;
-import sportshop.web.Model.DonHang;
+import sportshop.web.Entity.DanhMuc;
+import sportshop.web.Entity.DonHang;
 
 @Repository
 public interface DanhMucRepository extends JpaRepository<DanhMuc,Integer>, JpaSpecificationExecutor<DanhMuc> {

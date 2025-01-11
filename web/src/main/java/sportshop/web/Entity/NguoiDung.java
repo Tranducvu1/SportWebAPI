@@ -1,15 +1,13 @@
-package sportshop.web.Model;
-
-
-
+package sportshop.web.Entity;
 import java.util.Collection;
 import java.util.List;
-
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -22,6 +20,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import sportshop.web.DTO.Role;
 
 @Data
@@ -29,7 +28,10 @@ import sportshop.web.DTO.Role;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@DynamicInsert
+@DynamicUpdate
 @Table(name = "nguoidung")
+@ToString(exclude = {"tokens", "donHangs"})
 public class NguoiDung implements UserDetails {
 
   @Id
@@ -47,8 +49,11 @@ public class NguoiDung implements UserDetails {
   @Enumerated(EnumType.STRING)
   private Role role;
   @JsonManagedReference
-  @OneToMany(mappedBy = "nguoidung")
+  @OneToMany(mappedBy = "nguoidung", cascade = CascadeType.ALL)
   private List<Token> tokens;
+
+  @OneToMany(mappedBy = "nguoiDung", cascade = CascadeType.ALL)
+  private List<DonHang> donHangs;
 
   
   @Override
@@ -85,14 +90,6 @@ public class NguoiDung implements UserDetails {
   public boolean isEnabled() {
     return true;
   }
-
-@Override
-public String toString() {
-	return "NguoiDung [id=" + id + ", email=" + email + ", hoten=" + hoten + ", password=" + password
-			+ ", confirm_password=" + confirm_password + ", so_dien_thoai=" + so_dien_thoai + ", address=" + address
-			+ ", dayofbirth=" + dayofbirth + ", Gender=" + Gender + ", role=" + role + ", tokens=" + tokens + "]";
-}
-  
   
 
 }

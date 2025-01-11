@@ -12,8 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import sportshop.web.Model.Log;
-import sportshop.web.Model.NguoiDung;
+import sportshop.web.Entity.Log;
+import sportshop.web.Entity.NguoiDung;
 import sportshop.web.Repository.LogRepository;
 
 public class auditing implements AuditorAware<Long>{

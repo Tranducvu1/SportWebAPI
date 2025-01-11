@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import sportshop.web.Model.NhaCungCap;
+import sportshop.web.Entity.NhaCungCap;
 import sportshop.web.Service.NhaCungCapService;
 
 @RestController
-@RequestMapping("/api/nhacungcap")
+@RequestMapping("/api/v1/nhacungcap")
 public class NhaCungCapController {
 
 	

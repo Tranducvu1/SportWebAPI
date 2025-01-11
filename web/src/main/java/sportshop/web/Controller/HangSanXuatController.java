@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import sportshop.web.Model.HangSanXuat;
+import sportshop.web.Entity.HangSanXuat;
 import sportshop.web.Service.HangSanXuatService;
 
 
 
 @RestController
-@RequestMapping("/api/hangsanxuat")
+@RequestMapping("/api/v1/hangsanxuat")
 public class HangSanXuatController {
 	@Autowired
 	private HangSanXuatService hangSanXuatService;
