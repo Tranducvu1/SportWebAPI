@@ -18,10 +18,13 @@ public interface UserRepository  extends JpaRepository<NguoiDung,Long>, JpaSpeci
 	//@Query("SELECT DISTINCT n FROM nguoidung n JOIN n.vaiTro v WHERE v IN :vaiTro")
 	Optional<NguoiDung> findById(Integer id);
 //	Page<NguoiDung> findByVaiTro(@Param("vaiTro") Set<VaiTro> vaiTro, Pageable pageable);
-	Optional<NguoiDung> findByEmail(String email);
+	@Query("SELECT u FROM NguoiDung u WHERE u.email = :email")
+	Optional<NguoiDung> findByEmail(@Param("email") String email);
+
 	@Query("Select nguoidung FROM NguoiDung nguoidung WHERE nguoidung.email = :keyword")
 	NguoiDung searchByEmail(@Param("keyword") String keyword);
-
+	
+	
 	//VaiTro findByVaiTro(String vaiTro);
 
 	

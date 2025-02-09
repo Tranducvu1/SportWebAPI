@@ -14,7 +14,6 @@ public class MatHangDto implements Serializable {
     private Integer id;
     private String mamathang;
     private String tenmathang;
-    private String maphanloai;
     private String hinhanh;
     private Integer dongia;
     private Integer danhgia;
@@ -23,7 +22,7 @@ public class MatHangDto implements Serializable {
     private String mota;
     private Integer giamgia;
     private String gender;
-    private Timestamp ngaythem;
+    private String ngaythem;
     private Integer danhMucId;
     private Integer nhaSXId;
     private String danhMucTen;

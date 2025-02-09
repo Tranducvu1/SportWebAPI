@@ -1,8 +1,11 @@
 package sportshop.web.Entity;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,7 +25,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "giohang")
 @JsonIgnoreProperties(value={"hibernateLazyInitializer","handler","fieldHandler"})
-public class GioHang {
+public class GioHang implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)  // IDENTITY thường được ưu tiên hơn AUTO
@@ -46,5 +51,6 @@ public class GioHang {
     
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
+   
     private NguoiDung nguoiDung;
 }

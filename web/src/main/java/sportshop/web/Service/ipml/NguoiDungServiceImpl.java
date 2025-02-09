@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import sportshop.web.DTO.Role;
 import sportshop.web.Entity.NguoiDung;
 import sportshop.web.Repository.NguoiDungRepository;
 import sportshop.web.Service.NguoiDungService;
@@ -27,6 +28,12 @@ public class NguoiDungServiceImpl implements NguoiDungService {
         return optionalUser.orElse(null);
     }
 
+    public List<NguoiDung> filterUsers(String email, String hoten, String role) {
+        // Example logic for filtering
+        return nguoiDungRepository.findByEmailContainingAndHotenContainingAndRole(email, hoten, Role.valueOf(role));
+    }
+
+    
     @Override
     public NguoiDung createUser(NguoiDung nguoiDung) {
         return nguoiDungRepository.save(nguoiDung);
@@ -59,4 +66,10 @@ public class NguoiDungServiceImpl implements NguoiDungService {
     public NguoiDung findByEmail(String email) {
         return nguoiDungRepository.findByEmail(email);
     }
+    
+    @Override
+    public List<NguoiDung> findByhoten(String username) {
+    	return nguoiDungRepository.findByhoten(username);
+    }
+    
 }

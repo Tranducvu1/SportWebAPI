@@ -3,6 +3,7 @@ package sportshop.web.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,11 +44,33 @@ public class DanhmucController {
      * @param danhmuc - The category object to be created.
      * @return ResponseEntity indicating whether the category was successfully created.
      */
-    @PostMapping(path="/danhmuc/create", produces = "application/json;charset=utf-8")
-    public ResponseEntity<Boolean> createCategory(@RequestBody DanhMuc danhmuc) {
-        System.out.println(danhmuc);
-        Boolean result = danhMucService.save(danhmuc);
-        return ResponseEntity.ok(result);
+    @PostMapping(path="/create")
+    public ResponseEntity<String> createCategory(
+    		@RequestParam String madanhmuc, 
+    		@RequestParam String tendanhmuc
+    		) {
+        if(madanhmuc.isEmpty() || tendanhmuc.isEmpty()) {
+        	return ResponseEntity.badRequest().body("Vui lòng điền thông tin");
+        }
+        try {
+			DanhMuc dm = new DanhMuc();
+			dm.setTendanhmuc(tendanhmuc);
+			dm.setMadanhmuc(madanhmuc);
+			
+		boolean result = danhMucService.save(dm);
+		if (result) {
+            return ResponseEntity.ok("Danh mục đã được thêm thành công.");
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                 .body("Có lỗi xảy ra khi thêm sản phẩm.");
+        }
+		} catch (Exception e) {
+			 e.printStackTrace();
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                                 .body("Có lỗi xảy ra. Vui lòng thử lại.");
+		}
+	
+    
     }
 
     /**
@@ -57,7 +80,7 @@ public class DanhmucController {
      * @param productId - The ID of the product.
      * @return ResponseEntity with the product if found, or a 404 status if not.
      */
-    @GetMapping("/danhmuc/{danhMucId}/products/{productId}")
+    @GetMapping("/{danhMucId}/products/{productId}")
     public ResponseEntity<Object> getProductByCategory(@PathVariable("danhMucId") Integer danhMucId, 
                                                        @PathVariable("productId") Integer productId) {
         DanhMuc category = danhMucService.getById(danhMucId);
@@ -75,10 +98,37 @@ public class DanhmucController {
      * @param danhmuc - The updated category object.
      * @return ResponseEntity indicating whether the update was successful.
      */
-    @PutMapping(path="/danhmuc/update", consumes = "application/json", produces = "application/json;charset=utf-8")
-    public ResponseEntity<Boolean> updateCategory(@RequestBody @Valid DanhMuc danhmuc) {
-        Boolean result = danhMucService.update(danhmuc);
-        return ResponseEntity.ok(result);
+    @PutMapping(value = "/update/{id}", consumes = "multipart/form-data", produces = "application/json;charset=utf-8")
+    public ResponseEntity<String> updateCategory(@PathVariable Integer id, 
+    		@RequestParam String madanhmuc,
+    		@RequestParam String tendanhmuc) {
+    	try {
+			if(madanhmuc.isEmpty() || tendanhmuc.isEmpty()) {
+				ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body("Dữ liệu không hợp lệ, vui lòng kiểm tra lại.");
+			}
+			
+			DanhMuc danhmuc = danhMucService.getById(id);
+			if(danhmuc == null) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Danh mục không được tìm thấy.Vui lòng truy cập lại");
+				
+			}
+			
+			danhmuc.setMadanhmuc(madanhmuc);
+			danhmuc.setTendanhmuc(tendanhmuc);
+			Boolean result = danhMucService.update(danhmuc);
+			if(result) {
+				return ResponseEntity.ok("Thêm danh mục thành công");
+			} else {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Có lỗ xảy ra.Vui lòng thử lại");
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Cõ lỗi xảy ra");
+		}
+			
+       
     }
 
     /**
@@ -87,7 +137,7 @@ public class DanhmucController {
      * @param id - The ID of the category to retrieve.
      * @return The category object if found, otherwise a 404 status.
      */
-    @GetMapping("/danhmuc/{id}")
+    @GetMapping("/{id}")
     public DanhMuc getCategoryById(@PathVariable("id") Integer id) {
         return danhMucService.getById(id);
     }
@@ -98,7 +148,7 @@ public class DanhmucController {
      * @param keyword - The keyword used to filter categories.
      * @return ResponseEntity with a list of matching categories.
      */
-    @GetMapping("/danhmuc/search")
+    @GetMapping("/search")
     public ResponseEntity<Object> findByKeyword(@RequestParam(value = "keyword", required = false) String keyword) {        
         return ResponseEntity.ok(danhMucService.searchByKeyword(keyword));
     }
@@ -109,7 +159,7 @@ public class DanhmucController {
      * @param id - The ID of the category to be deleted.
      * @return ResponseEntity indicating the outcome of the deletion operation.
      */
-    @DeleteMapping("/danhmuc/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteCategory(@PathVariable Integer id) {
         try {
             Boolean isDeleted = danhMucService.deleteProduct(id);
@@ -133,7 +183,7 @@ public class DanhmucController {
      * @param pageSize - The number of categories per page.
      * @return ResponseEntity with the paginated categories.
      */
-    @GetMapping("/danhmuc/pagination/{offset}/{pageSize}")
+    @GetMapping("/pagination/{offset}/{pageSize}")
     public ResponseEntity<Page<DanhMuc>> getCategoryPagination(@PathVariable int offset, @PathVariable int pageSize) {
         Page<DanhMuc> categories = danhMucService.getDanhMucPagination(offset, pageSize);
         return ResponseEntity.ok(categories);

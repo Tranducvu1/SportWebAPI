@@ -37,7 +37,10 @@ public class SecurityConfiguration {
 		//    auth.requestMatchers("/api/auth/**", "/api/auth/register", "/api/auth/signup").permitAll()
 		// 	  .requestMatchers("/api/**").hasAuthority("ADMIN")
 		// 	 .requestMatchers("/sport/**").hasAuthority("MEMBER")
-		auth.requestMatchers("/api/**").permitAll()
+			auth
+			.requestMatchers("/images/**", "/static/**").permitAll()
+            .requestMatchers("/api/**").permitAll()
+		
 //				 .anyRequest().authenticated()           // all authentication
 			)
 	    .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))

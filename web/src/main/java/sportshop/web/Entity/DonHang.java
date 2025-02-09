@@ -6,6 +6,8 @@ import java.sql.Timestamp;
 import java.util.List;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -20,16 +22,13 @@ import lombok.NoArgsConstructor;
 @Table(name = "donhang")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 public class DonHang implements Serializable{
-	 private static final long serialVersionUID = 1L;
-    @Id
+private static final long serialVersionUID = 1L;
+
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private int id;
 
-    @NotBlank
-    @Size(max = 255)
-    @Column(name = "tenmathang", nullable = false)
-    private String tenmathang;
 
     @Column(name = "ngaydat", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false)
     private Timestamp ngaydat;
@@ -38,25 +37,20 @@ public class DonHang implements Serializable{
     private Timestamp ngaydukiennhan;
 
     @Positive
-    @Column(name = "phivanchuyen", nullable = false)
-    private BigDecimal phivanchuyen;
-
-    @Positive
     @Column(name = "soluong", nullable = false)
     private Integer soluong;
 
-    @Column(name = "hinhanh")
-    private String hinhanh;
-
+   
     @PositiveOrZero
     @Column(name = "money", nullable = false)
-    private BigDecimal money;
+    private double money;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "nguoidung_id", nullable = false)
+    @JsonBackReference
     private NguoiDung nguoiDung;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "donhang_mathang",
         joinColumns = @JoinColumn(name = "donhang_id"),

@@ -11,7 +11,6 @@ public class DonHangDTO {
     private String tenmathang;
     private String ngaydat;
     private String ngaydukiennhan;
-    private BigDecimal phivanchuyen;
     private Integer soluong;
     private BigDecimal money;
     private List<MatHang> matHangs;

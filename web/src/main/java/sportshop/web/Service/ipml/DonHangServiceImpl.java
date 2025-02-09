@@ -1,9 +1,6 @@
 package sportshop.web.Service.ipml;
 
-import java.sql.Timestamp;
 import java.util.List;
-import java.util.NoSuchElementException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +16,7 @@ import org.springframework.cache.annotation.CachePut;
 @Service
 @Slf4j
 public class DonHangServiceImpl implements DonHangService {
-
-    @Autowired
+	@Autowired
     private DonHangRepository donHangRepository;
 
     @Override
@@ -30,23 +26,13 @@ public class DonHangServiceImpl implements DonHangService {
         return donHangRepository.findAll();
     }
 
-    @Override
-    @Cacheable(value = "donHangList", key = "#keyword") 
-    public List<DonHang> searchByKeyword(String keyword) {
-        log.debug("Searching DonHang by keyword: {}", keyword);
-        return donHangRepository.searchByKeyword(keyword);
-    }
-
+   
     @Override
     @CacheEvict(value = "donHangList", allEntries = true)  // Clear the cache after update
     public Boolean update(DonHang donHang) {
         DonHang updatedDonHang = donHangRepository.save(donHang);
-        if (updatedDonHang != null) {
-            log.info("Updated DonHang with id = {}", updatedDonHang.getId());
-            return true;
-        }
-        log.warn("Failed to update DonHang: {}", donHang);
-        return false;
+        log.info("Updated DonHang with id = {}", updatedDonHang.getId());
+		return true;
     }
 
     @Override

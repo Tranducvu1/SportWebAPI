@@ -56,6 +56,7 @@ public class NguoiDung implements UserDetails {
   private List<DonHang> donHangs;
 
   
+  
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return role.getAuthorities();

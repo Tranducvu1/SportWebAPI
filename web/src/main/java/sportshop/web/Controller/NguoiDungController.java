@@ -16,13 +16,25 @@ public class NguoiDungController {
     @Autowired
     private NguoiDungService nguoiDungService;
 
-    // get all
+    // Get all users (with optional filters)
     @GetMapping
-    public ResponseEntity<List<NguoiDung>> getAllUsers() {
-        return ResponseEntity.ok(nguoiDungService.getAllUsers());
+    public ResponseEntity<List<NguoiDung>> getAllUsers(
+            @RequestParam(required = false) String email, 
+            @RequestParam(required = false) String hoten, 
+            @RequestParam(required = false) String role) {
+
+        List<NguoiDung> users;
+        
+        // If query parameters are provided, filter based on them
+        if (email != null || hoten != null || role != null) {
+            users = nguoiDungService.filterUsers(email, hoten, role);
+        } else {
+            users = nguoiDungService.getAllUsers();
+        }
+        return ResponseEntity.ok(users);
     }
 
-    // get use by id
+    // Get user by ID
     @GetMapping("/{id}")
     public ResponseEntity<NguoiDung> getUserById(@PathVariable Long id) {
         NguoiDung user = nguoiDungService.getUserById(id);
@@ -32,13 +44,13 @@ public class NguoiDungController {
         return ResponseEntity.ok(user);
     }
 
-    // addd
-    @PostMapping
+    // Add new user
+    @PostMapping("/create")
     public ResponseEntity<NguoiDung> createUser(@RequestBody NguoiDung nguoiDung) {
         return ResponseEntity.ok(nguoiDungService.createUser(nguoiDung));
     }
 
-    // update
+    // Update user by ID
     @PutMapping("/{id}")
     public ResponseEntity<NguoiDung> updateUser(@PathVariable Long id, @RequestBody NguoiDung nguoiDung) {
         NguoiDung updatedUser = nguoiDungService.updateUser(id, nguoiDung);
@@ -48,7 +60,7 @@ public class NguoiDungController {
         return ResponseEntity.ok(updatedUser);
     }
 
-    // delete
+    // Delete user by ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         nguoiDungService.deleteUser(id);

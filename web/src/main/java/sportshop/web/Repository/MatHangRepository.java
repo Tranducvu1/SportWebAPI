@@ -1,6 +1,7 @@
 package sportshop.web.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -40,8 +41,21 @@ public interface MatHangRepository extends JpaRepository<MatHang,Integer>, JpaSp
 
 	boolean existsById(Long id);
 
+	@Query("SELECT DISTINCT m FROM MatHang m WHERE " +
+	        "(LOWER(m.tenmathang) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+	        "LOWER(m.mota) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+	        "LOWER(m.gender) LIKE LOWER(CONCAT('%', :keyword, '%'))) " +
+	        "AND (LOWER(m.tenmathang) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+	        "LOWER(m.mota) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+	        "LOWER(m.gender) LIKE LOWER(CONCAT('%', :keyword, '%')))") 
+	List<MatHang> findByTenmathangContainingIgnoreCase(@Param("keyword") String keyword);
 
-    List<MatHang> findByTenmathangContainingIgnoreCase(String keyword);
+
+    
+    @Query("SELECT m FROM MatHang m WHERE LOWER(FUNCTION('REPLACE', m.tenmathang, 'á', 'a')) LIKE LOWER(CONCAT('%', :tenmathang, '%'))")
+    MatHang findByNormalizedProductName(@Param("tenmathang") String tenmathang);
+    Optional<MatHang> findByTenmathang(String tenMatHang);
+
 
 	//List<MatHang> findByDanhMuc(DanhMuc danhMuc);
 }

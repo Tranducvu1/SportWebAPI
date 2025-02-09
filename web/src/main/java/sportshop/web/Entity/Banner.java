@@ -1,5 +1,7 @@
 package sportshop.web.Entity;
 
+import java.io.Serializable;
+
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -21,7 +23,8 @@ import lombok.NoArgsConstructor;
 @DynamicUpdate
 @Table(name = "banner")
 @JsonIgnoreProperties(value={"hibernateLazyInitializer","handler","fieldHandler"})
-public class Banner {
+public class Banner implements Serializable {
+    private static final long serialVersionUID = 1L;
 	@Id
 	@Column(name = "id", nullable = false)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

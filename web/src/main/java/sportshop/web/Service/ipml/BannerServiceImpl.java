@@ -5,6 +5,8 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -25,12 +27,14 @@ public class BannerServiceImpl implements BannerService {
         this.bannerRepository = bannerRepository;
     }
 
+    @Cacheable(value = "bannerList")
     @Override
     public List<Banner> findAll() {
         log.debug("Fetching all banners");
         return bannerRepository.findAll();
     }
 
+    @CacheEvict(value = "bannerList", allEntries = true)
     @Override
     public Boolean save(Banner banner) {
         Banner savedBanner = bannerRepository.save(banner);
@@ -42,6 +46,7 @@ public class BannerServiceImpl implements BannerService {
         return false;
     }
 
+    @CacheEvict(value = "bannerList", allEntries = true)
     @Override
     public Boolean update(Banner banner) {
         Banner updatedBanner = bannerRepository.save(banner);
@@ -53,6 +58,7 @@ public class BannerServiceImpl implements BannerService {
         return false;
     }
 
+    @Cacheable(value = "banner", key = "#id")
     @Override
     public Banner getById(Integer id) {
         Banner banner = requireOne(id);
@@ -68,12 +74,14 @@ public class BannerServiceImpl implements BannerService {
                 });
     }
 
+    @Cacheable(value = "pagedBannerList", key = "{#offset, #pageSize}")
     @Override
     public Page<Banner> getBanner(int offset, int pageSize) {
         log.debug("Fetching banners with offset {} and pageSize {}", offset, pageSize);
         return bannerRepository.findAll(PageRequest.of(offset, pageSize));
     }
 
+    @CacheEvict(value = {"bannerList", "banner"}, allEntries = true)
     @Override
     public Boolean deleteBanner(Integer id) throws Exception {
         Optional<Banner> bannerOptional = bannerRepository.findById(id);

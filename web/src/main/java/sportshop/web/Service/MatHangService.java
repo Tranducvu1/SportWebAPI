@@ -16,6 +16,9 @@ public interface MatHangService {
     Boolean deleteProduct(Integer id) throws Exception;
     List<MatHang> findByCategoryId(Integer categoryId);
     MatHang getById(Integer id);
+    
     List<MatHang> findProductsWtihSorting(String field);
     Page<MatHangDto> filterAndSortProducts(Integer danhMucId, Integer hangSanXuatId, String priceRange, String sortOrder, Integer page, Integer size);
+	MatHang findByNormalizedProductName(String normalizedTenmathang);
+	MatHang findByTenMatHang(String tenmathang);
 }

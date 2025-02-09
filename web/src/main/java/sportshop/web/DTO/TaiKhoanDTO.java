@@ -27,6 +27,10 @@ public class TaiKhoanDTO {
 	@NotEmpty(message="Địa chỉ không được trống")
 	private String diaChi;
 	
+	private String dayofbirth;
+	
+	private String gender;
+	
 	@NotEmpty(message="Họ tên không được trống")
 	private String hoTen;
 	

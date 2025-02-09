@@ -10,4 +10,6 @@ public interface NguoiDungService {
     NguoiDung updateUser(Long id, NguoiDung nguoiDung);
     void deleteUser(Long id);
     NguoiDung findByEmail(String email);
+    List<NguoiDung> filterUsers(String email, String hoten, String role) ;
+    List<NguoiDung> findByhoten(String username);
 }

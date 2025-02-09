@@ -20,6 +20,7 @@ import sportshop.web.Config.JwtUtils;
 import sportshop.web.Config.LogoutService;
 import sportshop.web.Entity.NguoiDung;
 import sportshop.web.Repository.UserRepository;
+import sportshop.web.Service.NguoiDungService;
 import sportshop.web.Service.UserService;
 
 @RestController
@@ -28,7 +29,7 @@ public class AuthenticationController {
 	@Autowired
   private AuthenticationService service;
 	@Autowired
-	private UserService userService;
+	private NguoiDungService userService;
 	@Autowired
 	private JwtUtils jwtUtils;
 	@Autowired
@@ -37,7 +38,7 @@ public class AuthenticationController {
 	private LogoutService logoutService;
 	@GetMapping("/getAll")
 	 public ResponseEntity<Object> findall(){
-		return ResponseEntity.ok(userService.findAll());	 
+		return ResponseEntity.ok(userService.getAllUsers());	 
 	 }
   @PostMapping("/register")
   public ResponseEntity<AuthenticationResponse> register(
@@ -47,12 +48,17 @@ public class AuthenticationController {
     return ResponseEntity.ok(regis);
   }
   @PostMapping("/login")
-  public ResponseEntity<AuthenticationResponse> login(
-      @RequestBody AuthenticationRequest request
-  ) {
-		  return ResponseEntity.ok(service.login(request));
-	  
+  public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest request) {
+      // Gọi service login và lấy thông tin từ response
+      AuthenticationResponse authResponse = service.login(request);
+
+      // Kiểm tra console để xem đúng không
+      System.out.println("Login successful. Response: " + authResponse);
+
+      // Trả về response hoàn chỉnh
+      return ResponseEntity.ok(authResponse);
   }
+
   @GetMapping("/userdetails")
   public ResponseEntity<?> getUserDetails(@RequestHeader("Authorization") String token) {
 	  System.out.println(token);

@@ -1,6 +1,5 @@
 package sportshop.web.Service.ipml;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -59,11 +58,22 @@ public class MatHangServiceImpl implements MatHangService {
                 .orElseThrow(() -> new NoSuchElementException("Resource not found: " + productId));
     }
 
+    public MatHang findByTenMatHang(String tenMatHang) {
+        return mathangRepository.findByTenmathang(tenMatHang)
+            .orElse(null);
+    }
+    
     @Override
     public List<MatHang> searchByKeyword(String keyword) {
         log.debug("Searching for products with keyword: {}", keyword);
         return mathangRepository.findByTenmathangContainingIgnoreCase(keyword);
     }
+    
+    public MatHang findByNormalizedProductName(String productName) {
+        // Giả sử bạn có repository để truy vấn sản phẩm từ cơ sở dữ liệu
+        return mathangRepository.findByNormalizedProductName(productName);
+    }
+
 
     @Cacheable(value = "matHang", key = "#id")
     @Override
@@ -76,7 +86,6 @@ public class MatHangServiceImpl implements MatHangService {
     public Boolean save(MatHang matHang) throws Exception {
         try {
             log.debug("Saving new product: {}", matHang);
-            matHang.setNgaythem(new Timestamp(System.currentTimeMillis()));
             MatHang savedMatHang = mathangRepository.save(matHang);
             if (savedMatHang != null) {
                 logService.saveLog("Thêm mới mặt hàng id = " + savedMatHang.getId());
@@ -231,7 +240,6 @@ public class MatHangServiceImpl implements MatHangService {
                 .id(matHang.getId())
                 .mamathang(matHang.getMamathang())
                 .tenmathang(matHang.getTenmathang())
-                .maphanloai(matHang.getMaphanloai())
                 .hinhanh(matHang.getHinhanh())
                 .dongia(matHang.getDongia())
                 .danhgia(matHang.getDanhgia())

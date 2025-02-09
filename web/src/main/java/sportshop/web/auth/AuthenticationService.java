@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j; // Import Slf4j
 import sportshop.web.Config.JwtUtils;
+import sportshop.web.DTO.Role;
 import sportshop.web.Entity.Log;
 import sportshop.web.Entity.NguoiDung;
 import sportshop.web.Entity.Token;
@@ -25,7 +26,7 @@ import sportshop.web.token.TokenType;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j // Annotation cho logging
+@Slf4j
 public class AuthenticationService {
     @Autowired
     private final UserRepository repository;
@@ -53,18 +54,28 @@ public class AuthenticationService {
                         .email(request.getEmail())
                         .password(passwordEncoder.encode(request.getPassword()))
                         .so_dien_thoai(request.getSo_dien_thoai())
-                        .role(request.getRole())
+                        .role(Role.MEMBER) 
                         .hoten(request.getHoten())
                         .build();
+
                 var savedUser = repository.save(user);
                 var jwtToken = jwtService.generateToken(user);
                 var refreshToken = jwtService.generateRefreshToken(user);
                 saveUserToken(savedUser, jwtToken);
+
                 logger.setCreateTime(new Timestamp(System.currentTimeMillis()));
                 logger.setLogString("Đăng kí thành công");
                 log.info("User registered successfully with email: {}", request.getEmail());
 
                 return AuthenticationResponse.builder()
+                        .id(user.getId())
+                        .role(user.getRole())
+                        .email(user.getEmail())
+                        .hoten(user.getHoten())
+                        .so_dien_thoai(user.getSo_dien_thoai())
+                        .address(user.getAddress())
+                        .dayofbirth(user.getDayofbirth())
+                        .Gender(user.getGender())
                         .accessToken(jwtToken)
                         .refreshToken(refreshToken)
                         .build();
@@ -76,28 +87,36 @@ public class AuthenticationService {
             throw e;
         }
     }
+
     public AuthenticationResponse login(AuthenticationRequest request) {
         try {
             authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            request.getEmail(),
-                            request.getPassword()
-                    )
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
             );
+
             var user = repository.findByEmail(request.getEmail())
                     .orElseThrow(() -> new RuntimeException("User not found"));
+
             var jwtToken = jwtService.generateToken(user);
             var refreshToken = jwtService.generateRefreshToken(user);
+
             revokeAllUserTokens(user);
             saveUserToken(user, jwtToken);
-            log.info("User login successful for email: {}", request.getEmail());
+
             return AuthenticationResponse.builder()
+                    .id(user.getId())
+                    .role(user.getRole())
+                    .email(user.getEmail())
+                    .Gender(user.getGender())
+                    .dayofbirth(user.getDayofbirth())
+                    .hoten(user.getHoten())
+                    .so_dien_thoai(user.getSo_dien_thoai())
+                    .address(user.getAddress())
                     .accessToken(jwtToken)
                     .refreshToken(refreshToken)
                     .build();
         } catch (Exception e) {
-            log.error("Login failed for email: {}. Error: {}", request.getEmail(), e.getMessage());
-            throw e;
+            throw new RuntimeException("Login failed: " + e.getMessage());
         }
     }
 
@@ -108,21 +127,15 @@ public class AuthenticationService {
                 .expired(false)
                 .revoked(false)
                 .build();
-        log.info("Saving token for user with email: {}", user.getEmail());
         tokenRepository.save(token);
     }
 
     private void revokeAllUserTokens(NguoiDung user) {
         var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
-        if (validUserTokens.isEmpty()) {
-            log.info("No valid tokens found to revoke for user with email: {}", user.getEmail());
-            return;
-        }
         validUserTokens.forEach(token -> {
             token.setExpired(true);
             token.setRevoked(true);
         });
-        log.info("Revoked all tokens for user with email: {}", user.getEmail());
         tokenRepository.saveAll(validUserTokens);
     }
 
@@ -132,24 +145,28 @@ public class AuthenticationService {
             log.warn("Invalid or missing Authorization header");
             return;
         }
+
         final String refreshToken = authHeader.substring(7);
         final String userEmail = jwtService.extractEmail(refreshToken);
 
         if (userEmail != null) {
-            var user = this.repository.findByEmail(userEmail)
+            var user = repository.findByEmail(userEmail)
                     .orElseThrow(() -> new RuntimeException("User not found"));
+
             if (jwtService.isTokenValid(refreshToken, user)) {
                 var accessToken = jwtService.generateToken(user);
                 revokeAllUserTokens(user);
                 saveUserToken(user, accessToken);
+
                 var authResponse = AuthenticationResponse.builder()
                         .accessToken(accessToken)
                         .refreshToken(refreshToken)
                         .build();
                 new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
+
                 log.info("Token refreshed successfully for user: {}", userEmail);
             } else {
-                log.error("Invalid token for user: {}", userEmail);
+                log.error("Invalid or expired token for user: {}", userEmail);
             }
         } else {
             log.error("Unable to extract user email from token");

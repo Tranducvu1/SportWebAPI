@@ -9,6 +9,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
 
@@ -41,10 +42,8 @@ public class MatHang implements Serializable {
     @Column(name = "tenmathang", nullable = false, length = 100)
     private String tenmathang;
 
-    @Column(name = "maphanloai", nullable = false, length = 50)
-    private String maphanloai;
 
-    @Column(name = "hinhanh", nullable = false)
+    @Column(name = "hinhanh", nullable = true)
     private String hinhanh;
 
     @Column(name = "dongia", nullable = false)
@@ -65,12 +64,12 @@ public class MatHang implements Serializable {
     @Column(name = "giamgia", nullable = false)
     private int giamgia;
 
-    @Column(name = "gioi_tinh", nullable = false, length = 10)
+    @Column(name = "gioi_tinh", nullable = false)
     private String gender;
 
     @CreationTimestamp
-    @Column(name = "ngaythem", updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private Timestamp ngaythem;
+    @Column(name = "ngaythem", updatable = false)
+    private String ngaythem;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, optional = false)
     @JoinColumn(name = "danhmuc_id", nullable = false)
