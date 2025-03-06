@@ -29,7 +29,6 @@ private static final long serialVersionUID = 1L;
     @Column(name = "id", nullable = false)
     private int id;
 
-
     @Column(name = "ngaydat", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false)
     private Timestamp ngaydat;
 
@@ -40,7 +39,6 @@ private static final long serialVersionUID = 1L;
     @Column(name = "soluong", nullable = false)
     private Integer soluong;
 
-   
     @PositiveOrZero
     @Column(name = "money", nullable = false)
     private double money;

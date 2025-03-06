@@ -2,12 +2,14 @@ package sportshop.web.Entity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -25,12 +27,11 @@ import lombok.ToString;
 @Table(name = "mathang")
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {"danhMuc", "hangSanXuat"}) 
+@ToString(exclude = {"danhMuc", "hangSanXuat", "bienthes", "binhluans", "hinhanhs"})
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"}) 
 public class MatHang implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
@@ -41,22 +42,6 @@ public class MatHang implements Serializable {
 
     @Column(name = "tenmathang", nullable = false, length = 100)
     private String tenmathang;
-
-
-    @Column(name = "hinhanh", nullable = true)
-    private String hinhanh;
-
-    @Column(name = "dongia", nullable = false)
-    private int dongia;
-
-    @Column(name = "danhgia")
-    private int danhgia;
-
-    @Column(name = "soluong", nullable = false)
-    private int soluong;
-
-    @Column(name = "size", length = 20)
-    private String size;
 
     @Column(name = "mota", nullable = false, columnDefinition = "TEXT")
     private String mota;
@@ -79,4 +64,17 @@ public class MatHang implements Serializable {
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, optional = false)
     @JoinColumn(name = "ma_hang_sx", nullable = false)
     private HangSanXuat hangSanXuat;
+    
+	    @OneToMany(mappedBy = "mathang", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	    @JsonManagedReference
+	    private List<BienTheMatHang> bienthes;
+
+    @OneToMany(mappedBy = "mathang", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @JsonManagedReference
+    private List<BinhLuan> binhluans;
+
+    @OneToMany(mappedBy = "mathang", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @JsonManagedReference
+    private List<HinhAnhMatHang> hinhanhs;
+    
 }

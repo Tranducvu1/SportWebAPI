@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.querydsl.core.types.Path;
 
 import sportshop.web.DTO.MatHangDto;
+import sportshop.web.Entity.BienTheMatHang;
 import sportshop.web.Entity.DanhMuc;
 import sportshop.web.Entity.HangSanXuat;
+import sportshop.web.Entity.HinhAnhMatHang;
 import sportshop.web.Entity.MatHang;
 import sportshop.web.Service.FileService;
 import sportshop.web.Service.MatHangService;
@@ -56,7 +59,7 @@ public class MatHangController {
      *
      * @return ResponseEntity<List<MatHang>> containing all products
      */
-    @GetMapping
+    @GetMapping()
     public ResponseEntity<List<MatHang>> findAll() {
     	System.out.println(matHangService.findAll());
         return ResponseEntity.ok(matHangService.findAll());
@@ -86,19 +89,20 @@ public class MatHangController {
             @RequestParam String mamathang,
             @RequestParam String tenmathang,
             @RequestParam Integer dongia,
-            @RequestParam Integer danhgia,
             @RequestParam String mota,
             @RequestParam Integer danhmuc_id,
             @RequestParam Integer ma_hang_sx,
-            @RequestParam(required = false) MultipartFile imageFile,
+            @RequestParam(required = false) List<MultipartFile> imageFiles,  // Change to List
             @RequestParam String gioi_tinh,
             @RequestParam String size,
             @RequestParam Integer soluong,
             @RequestParam Integer giamgia,
-            @RequestParam(required = false) String ngaythem) {
+            @RequestParam(required = false) String ngaythem,
+            @RequestParam String mausac
+    		) {
 
         // Kiểm tra dữ liệu đầu vào
-        if (mamathang.isEmpty() || tenmathang.isEmpty() || dongia <= 0 || danhgia < 0 || mota.isEmpty()
+        if (mamathang.isEmpty() || tenmathang.isEmpty() || dongia <= 0 || mota.isEmpty()
                 || danhmuc_id == null || ma_hang_sx == null || gioi_tinh.isEmpty()
                 || size.isEmpty() || soluong <= 0 || giamgia < 0) {
             return ResponseEntity.badRequest().body("Vui lòng điền đầy đủ thông tin và đảm bảo giá trị hợp lệ.");
@@ -108,47 +112,46 @@ public class MatHangController {
             // Tạo đối tượng MatHang
             MatHang matHang = new MatHang();
             matHang.setMamathang(mamathang);
-            matHang.setTenmathang(tenmathang);
-            matHang.setDongia(dongia);
-            matHang.setDanhgia(danhgia);
+            matHang.setTenmathang(tenmathang);      
             matHang.setMota(mota);
-
+            BienTheMatHang btmh =  new BienTheMatHang();
+            btmh.setPrice(dongia);
+            btmh.setColor(mausac);
+            btmh.setNumber(soluong);
+            btmh.setSize(size);
             // Liên kết DanhMuc và HangSanXuat
             DanhMuc danhMuc = new DanhMuc();
             danhMuc.setId(danhmuc_id);
             matHang.setDanhMuc(danhMuc);
-            
             HangSanXuat hangSanXuat = new HangSanXuat();
             hangSanXuat.setId(ma_hang_sx);
             matHang.setHangSanXuat(hangSanXuat);
-
             // Ánh xạ các trường còn lại
             matHang.setGender(gioi_tinh);
-            matHang.setSize(size);
-            matHang.setSoluong(soluong);
             matHang.setGiamgia(giamgia);
             matHang.setNgaythem(ngaythem);
-
-            // Xử lý hình ảnh
-            if (imageFile != null && !imageFile.isEmpty()) {
-                // Tạo tên file dựa trên mã sản phẩm
-                String fileName = mamathang + ".png";
+            // Xử lý hình ảnh (now handling a list of images)
+            if (imageFiles != null && !imageFiles.isEmpty()) {
+                // List to store HinhAnhMatHangDTO objects
+                List<HinhAnhMatHang> hinhAnhList = new ArrayList<>();
                 String uploadDir = "src/main/resources/images/";
-
-                // Lưu file ảnh vào thư mục images
+                // Create the upload directory if it does not exist
                 java.nio.file.Path uploadPath = Paths.get(uploadDir);
                 if (!Files.exists(uploadPath)) {
                     Files.createDirectories(uploadPath);
                 }
-                
-                // Lưu file vào thư mục
-                java.nio.file.Path filePath = uploadPath.resolve(fileName);
-                Files.copy(imageFile.getInputStream(), filePath);
-                
-                // Cập nhật đường dẫn ảnh vào database
-                matHang.setHinhanh("/images/" + fileName);
+                for (MultipartFile imageFile : imageFiles) {
+                    if (!imageFile.isEmpty()) {
+                        String fileName = mamathang + "_" + System.currentTimeMillis() + ".png";
+                        java.nio.file.Path filePath = uploadPath.resolve(fileName);
+                        Files.copy(imageFile.getInputStream(), filePath);
+                        // Create a DTO for each image and add to the list
+                        HinhAnhMatHang hinhAnhDTO = new HinhAnhMatHang();
+                        hinhAnhDTO.setImageUrl("/images/" + fileName);
+                        hinhAnhList.add(hinhAnhDTO);
+                    }
+                }  
             }
-
             // Lưu sản phẩm vào cơ sở dữ liệu
             boolean result = matHangService.save(matHang);
 
@@ -156,15 +159,14 @@ public class MatHangController {
                 return ResponseEntity.ok("Sản phẩm đã được thêm thành công.");
             } else {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                     .body("Có lỗi xảy ra khi thêm sản phẩm.");
+                        .body("Có lỗi xảy ra khi thêm sản phẩm.");
             }
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                 .body("Có lỗi xảy ra. Vui lòng thử lại.");
+                    .body("Có lỗi xảy ra. Vui lòng thử lại.");
         }
     }
-
 
     /**
      * GET /api/v1/mathang/product/{id} : Get product by ID.
@@ -211,10 +213,7 @@ public class MatHangController {
                                   .replaceAll("[Đ]", "D");
         return normalized;
     }
-
-
-
-
+    
     /**
      * PUT /api/v1/mathang/{id} : Update an existing product.
      * Cache is automatically invalidated at the service layer.
@@ -223,13 +222,13 @@ public class MatHangController {
      * @param matHang updated product data
      * @return ResponseEntity<Boolean> indicating success/failure
      */
+    
     @PutMapping(value = "/update/{id}", consumes = "multipart/form-data", produces = "application/json;charset=utf-8")
     public ResponseEntity<String> update(
             @PathVariable Integer id,
             @RequestParam String mamathang,
             @RequestParam String tenmathang,
             @RequestParam Integer dongia,
-            @RequestParam Integer danhgia,
             @RequestParam String mota,
             @RequestParam Integer danhmuc_id,
             @RequestParam Integer ma_hang_sx,
@@ -238,12 +237,13 @@ public class MatHangController {
             @RequestParam String size,
             @RequestParam Integer soluong,
             @RequestParam Integer giamgia,
-            @RequestParam(required = false) String ngaythem) {
+            @RequestParam(required = false) String ngaythem,
+            @RequestParam String mausac
+    		) {
 
         try {
             // Validate input data
             if (dongia == null || dongia <= 0 ||
-                danhgia == null || danhgia < 0 ||
                 soluong == null || soluong < 0 || 
                 giamgia == null || giamgia < 0 ||
                 danhmuc_id == null || ma_hang_sx == null) {
@@ -257,18 +257,24 @@ public class MatHangController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body("Không tìm thấy sản phẩm để cập nhật.");
             }
+            
+            
 
             // Update basic fields
             existingProduct.setMamathang(mamathang);
             existingProduct.setTenmathang(tenmathang);
-            existingProduct.setDongia(dongia);
-            existingProduct.setDanhgia(danhgia);
             existingProduct.setMota(mota);
             existingProduct.setGender(gioi_tinh);
-            existingProduct.setSize(size);
-            existingProduct.setSoluong(soluong);
             existingProduct.setGiamgia(giamgia);
-
+            
+            BienTheMatHang bienThe = existingProduct.getBienthes().isEmpty() ?
+            		new BienTheMatHang() : existingProduct.getBienthes().get(0);
+            
+            bienThe.setMathang(existingProduct);
+            bienThe.setPrice(dongia);
+            bienThe.setColor(mausac);
+            bienThe.setSize(size);
+            bienThe.setNumber(soluong);
             // Update date if provided
             if (ngaythem != null && !ngaythem.isEmpty()) {
                 existingProduct.setNgaythem(ngaythem);
@@ -282,10 +288,11 @@ public class MatHangController {
                 if (!Files.exists(uploadPath)) {
                     Files.createDirectories(uploadPath);
                 }
-
+                HinhAnhMatHang hinhanh = existingProduct.getHinhanhs().isEmpty() ?
+                		new HinhAnhMatHang() : existingProduct.getHinhanhs().get(0);
                 // Xóa file ảnh cũ nếu tồn tại
-                if (existingProduct.getHinhanh() != null) {
-                    String oldImagePath = uploadDir + existingProduct.getHinhanh().replace("/images/", "");
+                if (hinhanh.getImageUrl()!= null) {
+                    String oldImagePath = uploadDir + hinhanh.getImageUrl().replace("/images/", "");
                     try {
                         Files.deleteIfExists(Paths.get(oldImagePath));
                     } catch (IOException e) {
@@ -296,26 +303,22 @@ public class MatHangController {
                 // Lưu file ảnh mới
                 java.nio.file.Path filePath = uploadPath.resolve(fileName);
                 Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-                
+   
                 // Cập nhật đường dẫn mới trong database
-                existingProduct.setHinhanh("/images/" + fileName);
+                hinhanh.setImageUrl("/images/" + fileName);
             }
-
             // Update category and manufacturer references
             // Instead of creating new instances, set only the IDs
             existingProduct.getDanhMuc().setId(danhmuc_id);
             existingProduct.getHangSanXuat().setId(ma_hang_sx);
-
             // Save updated product
             Boolean result = matHangService.update(existingProduct);
-            
             if (result) {
                 return ResponseEntity.ok("Sản phẩm đã được cập nhật thành công.");
             } else {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                         .body("Có lỗi xảy ra khi cập nhật sản phẩm.");
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -349,6 +352,7 @@ public class MatHangController {
      * @param sortOrder sort direction
      * @return ResponseEntity<Page<MatHangDto>> containing filtered products
      */
+    
     @GetMapping("/filter")
     public ResponseEntity<Page<MatHangDto>> getFilteredProducts(
             @RequestParam(defaultValue = "0") int offset,
@@ -357,12 +361,10 @@ public class MatHangController {
             @RequestParam(required = false) Integer hangSanXuatId,
             @RequestParam(required = false) String priceRange,
             @RequestParam(defaultValue = "asc") String sortOrder) {
-        
         // Validate page size
         if (pageSize <= 0) {
             return ResponseEntity.badRequest().build();
         }
-
         // Get filtered and paginated results
         Page<MatHangDto> result = matHangService.filterAndSortProducts(
             danhMucId, 
@@ -372,7 +374,8 @@ public class MatHangController {
             offset, 
             pageSize
         );
-
+        System.out.println("Products:");
+        result.getContent().forEach(System.out::println);
         return ResponseEntity.ok(result);
     }
 
@@ -387,16 +390,15 @@ public class MatHangController {
     public ResponseEntity<String> deleteProduct(@PathVariable Integer id) {
         try {
             Boolean isDeleted = matHangService.deleteProduct(id);
-            
             if (isDeleted) {
                 return ResponseEntity.ok("Product successfully deleted");
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                                       .body("Product not found");
+                       .body("Product not found");
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                   .body("An error occurred while deleting product");
+                   .body("An error occurred while deleting product");
         }
     }
 

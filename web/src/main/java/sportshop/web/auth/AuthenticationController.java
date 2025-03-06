@@ -39,34 +39,27 @@ public class AuthenticationController {
 	@GetMapping("/getAll")
 	 public ResponseEntity<Object> findall(){
 		return ResponseEntity.ok(userService.getAllUsers());	 
-	 }
+	}
   @PostMapping("/register")
   public ResponseEntity<AuthenticationResponse> register(
       @RequestBody RegisterRequest request
-  ) {
-	  AuthenticationResponse regis = service.register(request);
+  ) { AuthenticationResponse regis = service.register(request);
     return ResponseEntity.ok(regis);
   }
   @PostMapping("/login")
   public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest request) {
       // Gọi service login và lấy thông tin từ response
       AuthenticationResponse authResponse = service.login(request);
-
       // Kiểm tra console để xem đúng không
       System.out.println("Login successful. Response: " + authResponse);
-
       // Trả về response hoàn chỉnh
       return ResponseEntity.ok(authResponse);
   }
-
   @GetMapping("/userdetails")
   public ResponseEntity<?> getUserDetails(@RequestHeader("Authorization") String token) {
-	  System.out.println(token);
       String username = jwtUtils.extractEmail(token.substring(7));
-      System.out.println("username "+username);
       NguoiDung user = userRepository.searchByEmail(username);
-      	System.out.println( "hi"+user);
-      			RegisterRequest userDetailsResponse = new RegisterRequest(user.getId(),
+      RegisterRequest userDetailsResponse = new RegisterRequest(user.getId(),
           user.getHoten(), user.getEmail(), user.getSo_dien_thoai(), user.getAddress(),
           user.getHoten(), user.getGender(), null, user.getDayofbirth(), user.getHinhdaidien()
       );

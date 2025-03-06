@@ -9,12 +9,14 @@ import org.springframework.web.bind.annotation.*;
 
 import sportshop.web.DTO.ChiTietDonHangDTO;
 import sportshop.web.DTO.OrderRequest;
-import sportshop.web.Entity.ChiTietDonHang;
+import sportshop.web.Entity.BienTheMatHang;
 import sportshop.web.Entity.DonHang;
+import sportshop.web.Entity.GioHang;
+import sportshop.web.Entity.HinhAnhMatHang;
 import sportshop.web.Entity.MatHang;
 import sportshop.web.Entity.NguoiDung;
-import sportshop.web.Service.ChiTietDonHangService;
 import sportshop.web.Service.DonHangService;
+import sportshop.web.Service.GioHangService;
 import sportshop.web.Service.MatHangService;
 import sportshop.web.Service.NguoiDungService;
 
@@ -22,7 +24,6 @@ import sportshop.web.Service.NguoiDungService;
 @RequestMapping("/api/v1/order")
 public class DonHangController {
 
-    // Injecting services responsible for business logic related to orders, products, and users
     @Autowired
     private DonHangService orderService;
 
@@ -33,9 +34,8 @@ public class DonHangController {
     private NguoiDungService nguoiDungService;
     
     @Autowired
-    public ChiTietDonHangService chitietservice;
+    public GioHangService chitietservice;
 
-    
     @GetMapping()
     public ResponseEntity<List<DonHang>> findAll(){
     	return ResponseEntity.ok(orderService.findAll());
@@ -68,44 +68,42 @@ public class DonHangController {
             donHang.setNguoiDung(nguoiDung);
 
             // Tính tổng tiền và kiểm tra sản phẩm
-            List<ChiTietDonHang> chiTietDonHangs = new ArrayList<>();
+            List<GioHang> chiTietDonHangs = new ArrayList<>();
             double tongTien = 0.0;
             int tongSoLuong = 0; // Đảm bảo cập nhật tổng số lượng sản phẩm trong đơn hàng
             
             // Kiểm tra từng chi tiết đơn hàng
             for (ChiTietDonHangDTO chiTiet : donHangRequest.getChiTietDonHangs()) {
                 System.out.println("Đang tìm sản phẩm: " + chiTiet.getTenmathang());
-
                 // Tìm sản phẩm
                 MatHang matHang = productService.findByTenMatHang(chiTiet.getTenmathang());
                 if (matHang == null) {
                     System.out.println("Sản phẩm không tồn tại: " + chiTiet.getTenmathang());
                     return ResponseEntity.notFound().build();
                 }
-
-                // Kiểm tra số lượng
-                System.out.println("Số lượng áo có sẵn: " + matHang.getSoluong());
-                System.out.println("Số lượng áo mua: " + chiTiet.getSoluong());
-                if (matHang.getSoluong() < chiTiet.getSoluong()) {
+                BienTheMatHang bienThe = matHang.getBienthes().isEmpty() ?
+                		new BienTheMatHang() : matHang.getBienthes().get(0);
+                
+                HinhAnhMatHang hinhanh = matHang.getHinhanhs().isEmpty() ?
+                		new HinhAnhMatHang() : matHang.getHinhanhs().get(0);
+                
+                if (bienThe.getNumber() < chiTiet.getSoluong()) {
                     System.out.println("Không đủ số lượng sản phẩm: " + chiTiet.getTenmathang());
                     return ResponseEntity.badRequest().body("Sản phẩm " + chiTiet.getTenmathang() + " không đủ số lượng");
                 }
-
-                // Trừ số lượng sản phẩm
-                matHang.setSoluong(matHang.getSoluong() - chiTiet.getSoluong());
+                
+                
+                // delete product
+                bienThe.setNumber(bienThe.getNumber() - chiTiet.getSoluong());
                 productService.save(matHang);
 
                 // Tạo chi tiết đơn hàng
-                ChiTietDonHang chiTietDonHang = new ChiTietDonHang();
+                GioHang chiTietDonHang = new GioHang();
                 chiTietDonHang.setMatHang(matHang);
                 chiTietDonHang.setSoLuong(chiTiet.getSoluong());
-                chiTietDonHang.setMoney(matHang.getDongia() * chiTiet.getSoluong());
-                chiTietDonHang.setHinhanh(matHang.getHinhanh());
-                chiTietDonHang.setTenmathang(matHang.getTenmathang()); // Lưu tên sản phẩm vào bảng ChiTietDonHang
-                // Thêm chi tiết vào danh sách chi tiết đơn hàng
+                chiTietDonHang.setMoney(bienThe.getNumber() * chiTiet.getSoluong());
+                chiTietDonHang.setHinhanh(hinhanh.getImageUrl());
                 chiTietDonHangs.add(chiTietDonHang);
-
-                // Cập nhật tổng tiền
                 tongTien += chiTietDonHang.getMoney();
                 tongSoLuong += chiTiet.getSoluong();
             }
@@ -118,13 +116,13 @@ public class DonHangController {
             DonHang savedOrder = orderService.save(donHang);
             System.out.println("Lưu đơn hàng thành công: " + savedOrder.getId());
 
-            // Lưu chi tiết đơn hàng
-            for (ChiTietDonHang chiTiet : chiTietDonHangs) {
-                chiTiet.setDonHang(savedOrder); // Liên kết chi tiết đơn hàng với đơn hàng chính
-                chitietservice.save(chiTiet); // Lưu chi tiết đơn hàng
-            }
-
+//            // Lưu chi tiết đơn hàng
+//            for (GioHang chiTiet : chiTietDonHangs) {
+//                chiTiet.setMatHang(ma); 
+//                chitietservice.save(chiTiet);
+//            }
             return ResponseEntity.ok(savedOrder); // Trả về đơn hàng vừa lưu
+
         } catch (Exception e) {
             // Ghi lại lỗi chi tiết nếu có
             System.out.println("Lỗi khi tạo đơn hàng: " + e.getMessage());

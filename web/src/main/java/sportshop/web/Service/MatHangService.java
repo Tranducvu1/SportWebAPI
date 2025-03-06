@@ -21,4 +21,6 @@ public interface MatHangService {
     Page<MatHangDto> filterAndSortProducts(Integer danhMucId, Integer hangSanXuatId, String priceRange, String sortOrder, Integer page, Integer size);
 	MatHang findByNormalizedProductName(String normalizedTenmathang);
 	MatHang findByTenMatHang(String tenmathang);
+	
+	
 }

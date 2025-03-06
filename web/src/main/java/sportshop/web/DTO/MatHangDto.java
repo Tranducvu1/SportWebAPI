@@ -2,9 +2,13 @@ package sportshop.web.DTO;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 
 import lombok.Builder;
 import lombok.Data;
+import sportshop.web.Entity.BienTheMatHang;
+import sportshop.web.Entity.HinhAnhMatHang;
+import sportshop.web.Entity.MatHang;
 
 @Data
 @Builder
@@ -14,11 +18,7 @@ public class MatHangDto implements Serializable {
     private Integer id;
     private String mamathang;
     private String tenmathang;
-    private String hinhanh;
-    private Integer dongia;
     private Integer danhgia;
-    private Integer soluong;
-    private String size;
     private String mota;
     private Integer giamgia;
     private String gender;
@@ -27,4 +27,12 @@ public class MatHangDto implements Serializable {
     private Integer nhaSXId;
     private String danhMucTen;
     private String hangSanXuatTen;
+    private List<BienTheMatHangDTO> bienthes;
+    private List<HinhAnhMatHangDTO> hinhanhs;
+    private List<BinhLuanDTO> binhluans;
+    private List<DanhGiaDTO> danhgias;
 }
+
+
+
+
